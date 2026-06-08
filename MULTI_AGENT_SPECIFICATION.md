@@ -112,15 +112,23 @@ Khi có sự thay đổi về quy tắc (`rules`), kỹ năng (`skills`) hoặc 
 
 Một điểm quan trọng trong thiết kế hệ thống Multi-Agent là **bạn không cần chạy lại script `sync-agents.sh` khi chuyển đổi công việc qua lại giữa các Agent**.
 
-### Phân định vai trò của Script và Runtime Spec:
-*   **Script `sync-agents.sh` (Cấu hình tĩnh)**: Chỉ dùng để thiết lập hoặc cập nhật các quy định chung (`rules`, `skills`, `workflows`, `templates`) từ kho chứa tiêu chuẩn `sk-specs` sang dự án client.
-*   **Thư mục `.agents/sk-specs/active/` (Dữ liệu động)**: Lưu trữ trạng thái và ngữ cảnh làm việc thực tế của tác vụ hiện tại.
+### Thư mục cấu hình bắt buộc:
+*   **Thư mục `.agents/` (luôn có chữ 's')**: Đây là thư mục chuẩn được Agent tự động đọc để áp dụng rules/skills/workflows. Tuyệt đối không đặt tên là `.agent` để tránh lỗi cấu hình. Dữ liệu tiến độ hoạt động thực tế nằm tại `.agents/sk-specs/active/`.
 
-### Quy trình tự động kế thừa ngữ cảnh:
-Khi chuyển giao công việc từ Agent này sang Agent khác, quy trình diễn ra khép kín qua các bước:
+### Quy trình chuyển giao tự động với Checkpoint phản hồi:
+Khi chuyển giao công việc từ Agent này sang Agent khác, quy trình diễn ra khép kín qua các bước cùng các điểm kiểm duyệt (Checkpoints) bắt buộc:
 
-1.  **Ghi nhận tiến độ (Agent tiền nhiệm)**: Agent đang làm việc tự động cập nhật tiến độ chi tiết của các task/subtask vào file `progress.md` và các quyết định thiết kế vào `decisions.md` nằm trong thư mục active của tính năng.
-2.  **Khởi động Agent mới (Agent kế nhiệm)**: Khi Agent mới bắt đầu làm việc trên workspace client, nó sẽ đọc file `rules/spec-loading.md`.
-3.  **Tự động nạp ngữ cảnh**: Agent kế nhiệm tự động phân tích thư mục `active/` để tìm task tương ứng, đọc file `progress.md` để biết công việc đang dừng ở bước nào, đọc `ba.md` và `decisions.md` để hiểu yêu cầu nghiệp vụ và các quyết định kỹ thuật đã thống nhất.
-4.  **Tiếp tục triển khai**: Agent mới tiếp tục thực hiện các bước tiếp theo trong kế hoạch mà không cần người dùng phải cung cấp lại ngữ cảnh hoặc chạy bất kỳ script đồng bộ nào.
+1.  **Phân tích Nghiệp vụ (BA Phase) & Checkpoint**:
+    - Agent thực hiện phân tích nghiệp vụ và sinh file `ba.md`.
+    - **Checkpoint bắt buộc**: Agent phải dừng lại và hỏi người dùng: *"Bạn có muốn thay đổi hay bổ sung gì cho tài liệu Phân tích Nghiệp vụ (BA) này không?"*. Agent chỉ chuyển sang pha tiếp theo sau khi người dùng phê duyệt hoặc yêu cầu bỏ qua.
+2.  **Thiết kế kỹ thuật (Design Phase) & Checkpoint**:
+    - Agent sinh file đặc tả thiết kế kỹ thuật (`feature.md`/`refactor.md`/`fix-bug.md`).
+    - **Checkpoint bắt buộc**: Agent phải dừng lại và hỏi người dùng: *"Bạn có muốn chỉnh sửa gì trong thiết kế kỹ thuật/kế hoạch triển khai này không?"*. Agent chỉ bắt đầu sửa đổi mã nguồn sau khi người dùng phê duyệt kế hoạch.
+3.  **Thực thi & Cập nhật Tiến độ liên tục (Execution Phase)**:
+    - Trong suốt quá trình viết code và kiểm thử, Agent bắt đầu thực hiện nhiệm vụ nào hoặc hoàn thành nhiệm vụ nào **bắt buộc phải cập nhật ngay lập tức** tiến độ vào file `progress.md` (đánh dấu `[/]` cho nhiệm vụ đang làm, `[x]` cho nhiệm vụ đã xong).
+    - Khi hoàn thành toàn bộ, Agent cập nhật trạng thái chung trong `progress.md` thành `Completed`.
+4.  **Đánh giá Mã nguồn (Code Review Phase)**:
+    - Đây là pha **Code Review** kỹ thuật (kiểm tra mã nguồn thực tế đã cài đặt xem có hoạt động đúng như tài liệu `ba.md` đề ra, đạt các tiêu chí AC, tuân thủ cấu trúc dự án và yêu cầu độ phủ test tối thiểu hay không).
+    - Kết quả đánh giá được ghi nhận vào file `review.md`.
+
 
