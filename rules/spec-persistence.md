@@ -99,7 +99,7 @@ Must generate:
 
 - minimum 10 validation test cases
 
-# SPEC WRITING RULES
+# SPEC WRITING & PROGRESS RULES
 
 Use deterministic outputs.
 
@@ -112,3 +112,10 @@ Preserve:
 - risks
 - acceptance criteria
 - execution order
+
+Progress Updates (Mandatory):
+- During execution, the Agent **MUST** update `progress.md` immediately upon starting a task/subtask (marking as `[/]`) or completing it (marking as `[x]`).
+- The overall item status in `progress.md` must be set to `Completed` once all tasks are done.
+
+Target Directory:
+- Always use `.agents/sk-specs/active/<work-item-name>/` for active specs. Never use `.agent` (without 's').
