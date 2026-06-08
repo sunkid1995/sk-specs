@@ -127,13 +127,13 @@ Responsible for:
 All outputs generated from:
 
 - Feature
-- Bug
+- Bugfix
 - Refactor
 
 should automatically persist into:
 
 ```txt
-.agents/sk-specs/<feature-name>/
+.agents/sk-specs/<work-item-name>/
 ```
 
 without requiring explicit user instructions.
@@ -241,6 +241,13 @@ Refactor:
 After setup:
 
 ```md
+BA:
+Persist current todo tab
+```
+
+Or:
+
+```md
 Feature:
 Persist current todo tab
 ```
@@ -295,10 +302,8 @@ Additional recommended skills:
 .agents/skills/
 ├── api-design.md
 ├── react-query-patterns.md
-├── testing-rules.md
 ├── ui-accessibility.md
 ├── folder-structure.md
-├── performance-optimization.md
 ├── async-state-patterns.md
 └── persistence-migration.md
 ```
@@ -312,8 +317,7 @@ Additional recommended workflows:
 ├── release-checklist.md
 ├── performance-audit.md
 ├── state-migration.md
-├── dependency-cleanup.md
-└── testing-workflow.md
+└── dependency-cleanup.md
 ```
 
 # MULTI AGENT ENGINEERING BENEFITS

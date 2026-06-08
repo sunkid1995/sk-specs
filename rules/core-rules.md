@@ -33,13 +33,16 @@ Always check for and reuse existing code, utilities, helpers, patterns, and deci
 
 Do not write verbose or conversational responses. Always go straight to the point.
 
+- **Feature:** Must perform business analysis first and generate `ba.md` before coding.
+- **Refactor & Bugfix:** Must retrieve existing `ba.md` and test cases first. If `ba.md` does not exist (legacy code), must perform reverse-engineering to create `ba.md` before any code modification.
+
 # MANDATORY WORKFLOWS
 
 Feature:
-BA → Feature → Review
+BA (generate ba.md) → Design & Code (generate feature.md) → Review (generate review.md)
 
 Refactor:
-BA → Refactor → Review
+Retrieve/Create BA & old tests → Run old tests → Refactor (generate refactor.md) → Run old & new tests → Review (generate review.md)
 
-Bug:
-BA → Fix Bug → Review
+Bugfix:
+Retrieve/Create BA & old tests → Create reproduction test case → Fix Bug (generate fix-bug.md) → Run all tests → Review (generate review.md)
