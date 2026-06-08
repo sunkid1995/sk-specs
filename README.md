@@ -240,51 +240,56 @@ Refactor:
 
 After setup:
 
+#### Feature Workflow Flow
+
+**Step 1: Business Analysis** (Generates `ba.md`)
 ```md
-BA:
-Persist current todo tab
+BA: Persist current todo tab
 ```
 
-Or:
-
+**Step 2: Design & Code** (Generates `feature.md`)
 ```md
-Feature:
-Persist current todo tab
+Feature: Persist current todo tab
 ```
 
-Or:
-
+**Step 3: Review Code** (Generates `review.md`)
 ```md
-Analyze feature:
-Persist current todo tab
+Review: Persist current todo tab
 ```
 
-Or:
+---
 
+#### Bugfix Workflow Flow
+
+**Step 1: Find/Create BA & Reproduce Bug** (Generates `fix-bug.md`)
 ```md
-Create architecture for:
-Persist current todo tab
+Bugfix: Todo tab resets after refresh
 ```
 
-Or:
-
+**Step 2: Review Code** (Generates `review.md`)
 ```md
-Bug:
-Todo tab resets after refresh
+Review: Todo tab resets after refresh
 ```
 
-Or:
+---
 
+#### Refactor Workflow Flow
+
+**Step 1: Find/Create BA & Plan Refactor** (Generates `refactor.md`)
 ```md
-Refactor:
-Todo page state management
+Refactor: Todo page state management
 ```
 
-Or simply:
-
+**Step 2: Review Code** (Generates `review.md`)
 ```md
-Continue:
-Persist current todo tab
+Review: Todo page state management
+```
+
+---
+
+#### Continue interrupted work
+```md
+Continue: Persist current todo tab
 ```
 
 The agent will automatically:
