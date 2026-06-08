@@ -3,30 +3,39 @@
 ```txt
 .agents/
 ├── rules/
-│   ├── core-rules.md
-│   ├── output-format.md
-│   ├── import-rule.md
 │   ├── architecture-rules.md
+│   ├── core-rules.md
+│   ├── folder-structure-and-export-rules.md
+│   ├── import-rule.md
+│   ├── output-format.md
+│   ├── security-rules.md
+│   ├── spec-loading.md
 │   ├── spec-persistence.md
-│   └── spec-loading.md
-|   └── folder-structure-and-export-rules.md
+│   └── testing-rules.md
 │
 ├── skills/
-│   ├── frontend-stack.md
-│   ├── react-zustand-patterns.md
-│   ├── feature-analysis-skill.md
+│   ├── business-analysis.md
+│   ├── code-review-principles.md
 │   ├── debugging-patterns.md
+│   ├── feature-analysis-skill.md
+│   ├── frontend-stack.md
+│   ├── performance-optimization.md
+│   ├── react-zustand-patterns.md
 │   ├── refactor-principles.md
-│   └── regression-safety.md
+│   ├── regression-safety.md
+│   └── vietnamese_assistant.md
 │
 ├── workflows/
+│   ├── business-analysis.md
+│   ├── code-review.md
 │   ├── feature-analysis.md
 │   ├── feature-architecture.md
 │   ├── feature-task-breakdown.md
 │   ├── fix-bug.md
+│   ├── legacy-cleanup.md
 │   ├── root-cause-analysis.md
 │   ├── safe-refactor.md
-│   └── legacy-cleanup.md
+│   └── testing-workflow.md
 │
 └── sk-specs/
     ├── active/
@@ -34,6 +43,10 @@
     ├── archived/
     └── templates/
 ```
+
+> [!NOTE]
+> Trong repository này (`sk-specs`), các thư mục `rules/`, `skills/`, và `workflows/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
+> Khi tích hợp vào dự án Client (Workspace), các thư mục này sẽ được đặt bên trong thư mục con `.agents/` (ví dụ: `.agents/rules/`, `.agents/skills/`, `.agents/workflows/`).
 
 # PURPOSE OF EACH LAYER
 
@@ -94,7 +107,7 @@ Responsible for:
 
 ---
 
-## sk-specs/
+## .agents/sk-specs/
 
 Persistent engineering context shared across agents.
 
@@ -120,7 +133,7 @@ All outputs generated from:
 should automatically persist into:
 
 ```txt
-sk-specs/<feature-name>/
+.agents/sk-specs/<feature-name>/
 ```
 
 without requiring explicit user instructions.
@@ -132,10 +145,10 @@ without requiring explicit user instructions.
 ## Feature Workflow
 
 ```txt
-sk-specs/<feature-name>/
-├── 01-feature-analysis.md
-├── 02-architecture.md
-├── 03-task-breakdown.md
+.agents/sk-specs/<feature-name>/
+├── ba.md
+├── feature.md
+├── review.md
 ├── decisions.md
 ├── risks.md
 └── progress.md
@@ -146,11 +159,11 @@ sk-specs/<feature-name>/
 ## Bugfix Workflow
 
 ```txt
-sk-specs/<bug-name>/
-├── 01-bug-analysis.md
-├── 02-root-cause.md
-├── 03-fix-strategy.md
-├── regression-checklist.md
+.agents/sk-specs/<bug-name>/
+├── ba.md
+├── fix-bug.md
+├── review.md
+├── decisions.md
 ├── risks.md
 └── progress.md
 ```
@@ -160,12 +173,12 @@ sk-specs/<bug-name>/
 ## Refactor Workflow
 
 ```txt
-sk-specs/<refactor-name>/
-├── 01-refactor-analysis.md
-├── 02-refactor-plan.md
-├── 03-risk-analysis.md
-├── regression-checklist.md
+.agents/sk-specs/<refactor-name>/
+├── ba.md
+├── refactor.md
+├── review.md
 ├── decisions.md
+├── risks.md
 └── progress.md
 ```
 
@@ -174,7 +187,7 @@ sk-specs/<refactor-name>/
 Before generating new outputs:
 
 1. Automatically search existing specs in:
-   `sk-specs/`
+   `.agents/sk-specs/`
 
 2. Automatically load:
    - feature analysis
@@ -337,5 +350,5 @@ Idea
 All stages share the same persistent engineering context through:
 
 ```txt
-sk-specs/
+.agents/sk-specs/
 ```

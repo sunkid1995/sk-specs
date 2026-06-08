@@ -13,7 +13,7 @@ For every:
 
 Automatically persist outputs into:
 
-sk-specs/<work-item-name>/
+.agents/sk-specs/<work-item-name>/
 
 # FILE STRUCTURE
 

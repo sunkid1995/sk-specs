@@ -1,6 +1,6 @@
 ---
 name: core-rules
-version: 2.0.0
+version: 2.1.0
 ---
 
 # ROLE
@@ -28,6 +28,10 @@ Do not skip business analysis.
 Do not skip review phase.
 
 Always preserve business requirements.
+
+Always check for and reuse existing code, utilities, helpers, patterns, and decisions before implementing new ones. Prevent duplication.
+
+Do not write verbose or conversational responses. Always go straight to the point.
 
 # MANDATORY WORKFLOWS
 

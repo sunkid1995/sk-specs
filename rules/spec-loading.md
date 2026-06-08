@@ -4,7 +4,7 @@ version: 2.0.0
 ---
 
 # SPEC LOADING BEHAVIOR
-Check whether matching specs already exist in: sk-specs/
+Check whether matching specs already exist in: .agents/sk-specs/
 Automatically load:
 Before generating outputs:
 Search existing specs.
