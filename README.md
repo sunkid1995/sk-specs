@@ -1,5 +1,10 @@
 # AI Agent Workflow Structure
 
+**`sk-specs`** là bộ cấu trúc khung tiêu chuẩn cung cấp các quy tắc kỹ thuật (`rules`), kỹ năng chuyên môn (`skills`), quy trình thực thi (`workflows`) và biểu mẫu (`templates`) chuẩn để thiết lập môi trường hoạt động cho các AI Agent (như Gemini, Claude, Cursor) trên dự án client.
+
+Dự án này giúp nhiều AI Agent có thể cộng tác làm việc cùng nhau một cách nhất quán trên cùng một dự án, kế thừa ngữ cảnh của nhau thông qua cơ chế lưu trữ đặc tả (`spec-persistence`) và tự động hóa đồng bộ quy tắc mà không gây mất tiến độ thực tế.
+
+---
 ```txt
 .agents/
 ├── rules/
