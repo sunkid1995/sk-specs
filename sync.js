@@ -21,7 +21,7 @@ const targetAgentsDir = path.join(clientDir, '.agents');
 
 // Kiểm tra sự tồn tại của thư mục .agents ở client
 if (fs.existsSync(targetAgentsDir)) {
-    console.log("- Tìm thấy thư mục .agents/ đã có sẵn tại dự án client. Tiến hành đồng bộ...");
+    console.log("- Tìm thấy thư mục .agents/ đã có sẵn tại dự án client.");
 } else {
     console.log("- Thư mục .agents/ chưa tồn tại. Tiến hành khởi tạo thư mục .agents/ mới...");
     fs.mkdirSync(targetAgentsDir, { recursive: true });
@@ -49,24 +49,6 @@ function copyDirSync(src, dest) {
     }
 }
 
-// Hàm đồng bộ thư mục cấu hình và xóa dữ liệu cũ
-function syncConfigDir(folderName) {
-    const srcFolder = path.join(srcDir, folderName);
-    const destFolder = path.join(targetAgentsDir, folderName);
-
-    if (fs.existsSync(destFolder)) {
-        fs.rmSync(destFolder, { recursive: true, force: true });
-    }
-    copyDirSync(srcFolder, destFolder);
-    console.log(`- Đã đồng bộ thư mục ${folderName}/`);
-}
-
-// Đồng bộ rules, skills, workflows trực tiếp dưới .agents/
-console.log("Đang đồng bộ rules, skills, workflows...");
-syncConfigDir('rules');
-syncConfigDir('skills');
-syncConfigDir('workflows');
-
 // Đồng bộ bản sao repo sk-specs vào .agents/sk-specs/
 const targetSkSpecsDir = path.join(targetAgentsDir, 'sk-specs');
 
@@ -74,7 +56,7 @@ const targetSkSpecsDir = path.join(targetAgentsDir, 'sk-specs');
 if (srcDir === targetSkSpecsDir) {
     console.log("- Đang chạy trực tiếp từ thư mục .agents/sk-specs của dự án client. Không cần tự nhân bản.");
 } else {
-    console.log("Đang đồng bộ bản sao repository sk-specs vào .agents/sk-specs/...");
+    console.log("Đang đồng bộ cấu hình sk-specs vào .agents/sk-specs/...");
     fs.mkdirSync(targetSkSpecsDir, { recursive: true });
 
     // Copy các file tĩnh của repo vào .agents/sk-specs/
@@ -96,6 +78,7 @@ if (srcDir === targetSkSpecsDir) {
             fs.rmSync(destFolder, { recursive: true, force: true });
         }
         copyDirSync(srcFolder, destFolder);
+        console.log(`- Đã đồng bộ thư mục sk-specs/${folder}/`);
     }
 }
 
