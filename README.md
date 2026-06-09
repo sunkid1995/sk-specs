@@ -7,51 +7,55 @@ Dự án này giúp nhiều AI Agent có thể cộng tác làm việc cùng nha
 ---
 ```txt
 .agents/
-├── rules/
-│   ├── architecture-rules.md
-│   ├── core-rules.md
-│   ├── folder-structure-and-export-rules.md
-│   ├── import-rule.md
-│   ├── output-format.md
-│   ├── security-rules.md
-│   ├── spec-loading.md
-│   ├── spec-persistence.md
-│   └── testing-rules.md
-│
-├── skills/
-│   ├── business-analysis.md
-│   ├── code-review-principles.md
-│   ├── debugging-patterns.md
-│   ├── feature-analysis-skill.md
-│   ├── frontend-stack.md
-│   ├── performance-optimization.md
-│   ├── react-zustand-patterns.md
-│   ├── refactor-principles.md
-│   ├── regression-safety.md
-│   └── vietnamese_assistant.md
-│
-├── workflows/
-│   ├── business-analysis.md
-│   ├── code-review.md
-│   ├── feature-analysis.md
-│   ├── feature-architecture.md
-│   ├── feature-task-breakdown.md
-│   ├── fix-bug.md
-│   ├── legacy-cleanup.md
-│   ├── root-cause-analysis.md
-│   ├── safe-refactor.md
-│   └── testing-workflow.md
-│
 └── sk-specs/
+    ├── rules/
+    │   ├── architecture-rules.md
+    │   ├── core-rules.md
+    │   ├── folder-structure-and-export-rules.md
+    │   ├── import-rule.md
+    │   ├── output-format.md
+    │   ├── security-rules.md
+    │   ├── spec-loading.md
+    │   ├── spec-persistence.md
+    │   └── testing-rules.md
+    │
+    ├── skills/
+    │   ├── business-analysis.md
+    │   ├── code-review-principles.md
+    │   ├── debugging-patterns.md
+    │   ├── feature-analysis-skill.md
+    │   ├── frontend-stack.md
+    │   ├── performance-optimization.md
+    │   ├── react-zustand-patterns.md
+    │   ├── refactor-principles.md
+    │   ├── regression-safety.md
+    │   └── vietnamese_assistant.md
+    │
+    ├── workflows/
+    │   ├── business-analysis.md
+    │   ├── code-review.md
+    │   ├── feature-analysis.md
+    │   ├── feature-architecture.md
+    │   ├── feature-task-breakdown.md
+    │   ├── fix-bug.md
+    │   ├── legacy-cleanup.md
+    │   ├── root-cause-analysis.md
+    │   ├── safe-refactor.md
+    │   └── testing-workflow.md
+    │
+    ├── templates/
+    │   ├── ba.md
+    │   ├── feature.md
+    │   ├── progress.md
+    │   └── ...
     ├── active/
     ├── completed/
-    ├── archived/
-    └── templates/
+    └── archived/
 ```
 
 > [!NOTE]
 > Trong repository này (`sk-specs`), các thư mục `rules/`, `skills/`, và `workflows/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
-> Khi tích hợp vào dự án Client (Workspace), các thư mục này sẽ được đặt bên trong thư mục con `.agents/` (ví dụ: `.agents/rules/`, `.agents/skills/`, `.agents/workflows/`).
+> Khi tích hợp vào dự án Client (Workspace), toàn bộ repository sẽ được copy gọn gàng vào bên trong `.agents/sk-specs/` (ví dụ: `.agents/sk-specs/rules/`, `.agents/sk-specs/skills/`, v.v.), giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè đè lên các rule/skill riêng của dự án client).
 
 # HƯỚNG DẪN CÀI ĐẶT & ĐỒNG BỘ (INSTALLATION & SYNC)
 

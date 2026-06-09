@@ -32,56 +32,45 @@ echo "Thư mục đích (Client .agents/): $TARGET_AGENTS_DIR"
 
 # Kiểm tra sự tồn tại của thư mục .agents ở client và hiển thị log phù hợp
 if [ -d "$TARGET_AGENTS_DIR" ]; then
-    echo "- Tìm thấy thư mục .agents/ đã có sẵn tại dự án client. Tiến hành đồng bộ..."
+    echo "- Tìm thấy thư mục .agents/ đã có sẵn tại dự án client."
 else
     echo "- Thư mục .agents/ chưa tồn tại. Tiến hành khởi tạo thư mục .agents/ mới..."
     mkdir -p "$TARGET_AGENTS_DIR"
 fi
-
-# Đồng bộ các thư mục rules, skills, workflows trực tiếp dưới .agents/ (Ghi đè để cập nhật bản mới nhất)
-echo "Đang đồng bộ rules, skills, workflows..."
-
-# rules
-rm -rf "$TARGET_AGENTS_DIR/rules"
-cp -R "$SCRIPT_DIR_ABS/rules" "$TARGET_AGENTS_DIR/rules"
-echo "- Đã đồng bộ thư mục rules/"
-
-# skills
-rm -rf "$TARGET_AGENTS_DIR/skills"
-cp -R "$SCRIPT_DIR_ABS/skills" "$TARGET_AGENTS_DIR/skills"
-echo "- Đã đồng bộ thư mục skills/"
-
-# workflows
-rm -rf "$TARGET_AGENTS_DIR/workflows"
-cp -R "$SCRIPT_DIR_ABS/workflows" "$TARGET_AGENTS_DIR/workflows"
-echo "- Đã đồng bộ thư mục workflows/"
 
 # Kiểm tra xem có đang chạy trực tiếp từ trong thư mục .agents/sk-specs của client hay không
 if [ "$SCRIPT_DIR_ABS" = "$TARGET_AGENTS_DIR/sk-specs" ]; then
     echo "- Đang chạy trực tiếp từ thư mục .agents/sk-specs của dự án client. Không cần tự nhân bản."
 else
     # Đồng bộ bản sao của toàn bộ repo sk-specs vào trong TARGET_AGENTS_DIR/sk-specs/
-    echo "Đang đồng bộ bản sao repository sk-specs vào .agents/sk-specs/..."
+    echo "Đang đồng bộ cấu hình sk-specs vào .agents/sk-specs/..."
     mkdir -p "$TARGET_AGENTS_DIR/sk-specs"
 
     # Copy các file tĩnh
     cp "$SCRIPT_DIR_ABS/README.md" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
     cp "$SCRIPT_DIR_ABS/PROJECT_STRUCTURE.md" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
     cp "$SCRIPT_DIR_ABS/sync-agents.sh" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
+    cp "$SCRIPT_DIR_ABS/sync.js" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
+    cp "$SCRIPT_DIR_ABS/package.json" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
     chmod +x "$TARGET_AGENTS_DIR/sk-specs/sync-agents.sh" 2>/dev/null
+    chmod +x "$TARGET_AGENTS_DIR/sk-specs/sync.js" 2>/dev/null
 
     # Copy các thư mục cấu hình và templates vào sk-specs/
     rm -rf "$TARGET_AGENTS_DIR/sk-specs/rules"
     cp -R "$SCRIPT_DIR_ABS/rules" "$TARGET_AGENTS_DIR/sk-specs/rules"
+    echo "- Đã đồng bộ thư mục sk-specs/rules/"
 
     rm -rf "$TARGET_AGENTS_DIR/sk-specs/skills"
     cp -R "$SCRIPT_DIR_ABS/skills" "$TARGET_AGENTS_DIR/sk-specs/skills"
+    echo "- Đã đồng bộ thư mục sk-specs/skills/"
 
     rm -rf "$TARGET_AGENTS_DIR/sk-specs/workflows"
     cp -R "$SCRIPT_DIR_ABS/workflows" "$TARGET_AGENTS_DIR/sk-specs/workflows"
+    echo "- Đã đồng bộ thư mục sk-specs/workflows/"
 
     rm -rf "$TARGET_AGENTS_DIR/sk-specs/templates"
     cp -R "$SCRIPT_DIR_ABS/templates" "$TARGET_AGENTS_DIR/sk-specs/templates"
+    echo "- Đã đồng bộ thư mục sk-specs/templates/"
 fi
 
 # Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại
