@@ -6,6 +6,17 @@
   "bin": {
     "sk-specs": "./sync.js"
   },
+  "files": [
+    "rules",
+    "skills",
+    "workflows",
+    "templates",
+    "sync.js",
+    "sync-agents.sh",
+    "README.md",
+    "PROJECT_STRUCTURE.md",
+    "package.json"
+  ],
   "scripts": {
     "sync": "node sync.js"
   },
