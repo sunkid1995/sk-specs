@@ -19,42 +19,75 @@ fi
 CLIENT_DIR_ABS=$(cd "$CLIENT_DIR" && pwd)
 SCRIPT_DIR_ABS=$(cd "$(dirname "$0")" && pwd)
 
+# Xác định thư mục .agents đích thực tế để tránh trùng lặp .agents/.agents
+if [[ "$CLIENT_DIR_ABS" == */.agents ]] || [[ "$CLIENT_DIR_ABS" == */.agents/ ]]; then
+    TARGET_AGENTS_DIR="${CLIENT_DIR_ABS%/}"
+else
+    TARGET_AGENTS_DIR="$CLIENT_DIR_ABS/.agents"
+fi
+
 echo "Bắt đầu đồng bộ cấu hình Multi-Agent..."
 echo "Thư mục nguồn (sk-specs): $SCRIPT_DIR_ABS"
-echo "Thư mục đích (Client): $CLIENT_DIR_ABS"
+echo "Thư mục đích (Client .agents/): $TARGET_AGENTS_DIR"
 
-# Tạo thư mục .agents nếu chưa tồn tại
-mkdir -p "$CLIENT_DIR_ABS/.agents"
+# Kiểm tra sự tồn tại của thư mục .agents ở client và hiển thị log phù hợp
+if [ -d "$TARGET_AGENTS_DIR" ]; then
+    echo "- Tìm thấy thư mục .agents/ đã có sẵn tại dự án client. Tiến hành đồng bộ..."
+else
+    echo "- Thư mục .agents/ chưa tồn tại. Tiến hành khởi tạo thư mục .agents/ mới..."
+    mkdir -p "$TARGET_AGENTS_DIR"
+fi
 
-# Đồng bộ các thư mục rules, skills, workflows (Ghi đè để cập nhật bản mới nhất)
+# Đồng bộ các thư mục rules, skills, workflows trực tiếp dưới .agents/ (Ghi đè để cập nhật bản mới nhất)
 echo "Đang đồng bộ rules, skills, workflows..."
 
 # rules
-rm -rf "$CLIENT_DIR_ABS/.agents/rules"
-cp -R "$SCRIPT_DIR_ABS/rules" "$CLIENT_DIR_ABS/.agents/rules"
+rm -rf "$TARGET_AGENTS_DIR/rules"
+cp -R "$SCRIPT_DIR_ABS/rules" "$TARGET_AGENTS_DIR/rules"
 echo "- Đã đồng bộ thư mục rules/"
 
 # skills
-rm -rf "$CLIENT_DIR_ABS/.agents/skills"
-cp -R "$SCRIPT_DIR_ABS/skills" "$CLIENT_DIR_ABS/.agents/skills"
+rm -rf "$TARGET_AGENTS_DIR/skills"
+cp -R "$SCRIPT_DIR_ABS/skills" "$TARGET_AGENTS_DIR/skills"
 echo "- Đã đồng bộ thư mục skills/"
 
 # workflows
-rm -rf "$CLIENT_DIR_ABS/.agents/workflows"
-cp -R "$SCRIPT_DIR_ABS/workflows" "$CLIENT_DIR_ABS/.agents/workflows"
+rm -rf "$TARGET_AGENTS_DIR/workflows"
+cp -R "$SCRIPT_DIR_ABS/workflows" "$TARGET_AGENTS_DIR/workflows"
 echo "- Đã đồng bộ thư mục workflows/"
 
-# Khởi tạo cấu trúc sk-specs
-echo "Đang khởi tạo cấu trúc .agents/sk-specs/..."
+# Kiểm tra xem có đang chạy trực tiếp từ trong thư mục .agents/sk-specs của client hay không
+if [ "$SCRIPT_DIR_ABS" = "$TARGET_AGENTS_DIR/sk-specs" ]; then
+    echo "- Đang chạy trực tiếp từ thư mục .agents/sk-specs của dự án client. Không cần tự nhân bản."
+else
+    # Đồng bộ bản sao của toàn bộ repo sk-specs vào trong TARGET_AGENTS_DIR/sk-specs/
+    echo "Đang đồng bộ bản sao repository sk-specs vào .agents/sk-specs/..."
+    mkdir -p "$TARGET_AGENTS_DIR/sk-specs"
 
-mkdir -p "$CLIENT_DIR_ABS/.agents/sk-specs/active"
-mkdir -p "$CLIENT_DIR_ABS/.agents/sk-specs/completed"
-mkdir -p "$CLIENT_DIR_ABS/.agents/sk-specs/archived"
+    # Copy các file tĩnh
+    cp "$SCRIPT_DIR_ABS/README.md" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
+    cp "$SCRIPT_DIR_ABS/PROJECT_STRUCTURE.md" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
+    cp "$SCRIPT_DIR_ABS/sync-agents.sh" "$TARGET_AGENTS_DIR/sk-specs/" 2>/dev/null
+    chmod +x "$TARGET_AGENTS_DIR/sk-specs/sync-agents.sh" 2>/dev/null
+
+    # Copy các thư mục cấu hình và templates vào sk-specs/
+    rm -rf "$TARGET_AGENTS_DIR/sk-specs/rules"
+    cp -R "$SCRIPT_DIR_ABS/rules" "$TARGET_AGENTS_DIR/sk-specs/rules"
+
+    rm -rf "$TARGET_AGENTS_DIR/sk-specs/skills"
+    cp -R "$SCRIPT_DIR_ABS/skills" "$TARGET_AGENTS_DIR/sk-specs/skills"
+
+    rm -rf "$TARGET_AGENTS_DIR/sk-specs/workflows"
+    cp -R "$SCRIPT_DIR_ABS/workflows" "$TARGET_AGENTS_DIR/sk-specs/workflows"
+
+    rm -rf "$TARGET_AGENTS_DIR/sk-specs/templates"
+    cp -R "$SCRIPT_DIR_ABS/templates" "$TARGET_AGENTS_DIR/sk-specs/templates"
+fi
+
+# Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại
+mkdir -p "$TARGET_AGENTS_DIR/sk-specs/active"
+mkdir -p "$TARGET_AGENTS_DIR/sk-specs/completed"
+mkdir -p "$TARGET_AGENTS_DIR/sk-specs/archived"
 echo "- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại"
-
-# Đồng bộ templates vào .agents/sk-specs/templates
-rm -rf "$CLIENT_DIR_ABS/.agents/sk-specs/templates"
-cp -R "$SCRIPT_DIR_ABS/templates" "$CLIENT_DIR_ABS/.agents/sk-specs/templates"
-echo "- Đã đồng bộ các file template vào sk-specs/templates/"
 
 echo "Đồng bộ cấu hình Multi-Agent hoàn tất thành công!"

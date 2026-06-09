@@ -96,13 +96,25 @@ Sau khi đồng bộ, thư mục `.agents/` tại dự án client sẽ có cấu
 
 ## 4. Quy trình Vận hành Đồng bộ
 
-Khi có sự thay đổi về quy tắc (`rules`), kỹ năng (`skills`) hoặc quy trình (`workflows`) tại repository gốc `sk-specs`, người quản trị chỉ cần chạy script đồng bộ:
+Bạn có thể thực hiện đồng bộ hóa quy tắc bằng hai phương thức chính:
 
+### Phương thức 1: Sử dụng `npx` (Khuyên dùng khi kéo từ Github/NPM)
+Người dùng chỉ cần đứng tại thư mục gốc của dự án client và khởi chạy trực tiếp lệnh npx để kéo bản cập nhật mới nhất từ repository:
+```bash
+npx github:sunkid1995/sk-specs
+```
+Lệnh này sẽ tự động chạy script Node.js (`sync.js`), nhận diện thư mục hiện hành và thực hiện đồng bộ đè cấu hình vào thư mục `.agents/`.
+
+### Phương thức 2: Chạy trực tiếp Script Bash
+Chạy script đồng bộ cục bộ từ thư mục của `sk-specs` sang dự án client:
 ```bash
 ./sync-agents.sh <path-to-client-project>
 ```
 
 ### Cách xử lý ghi đè an toàn:
+- **Thư mục gốc cấu hình (`.agents/`)**: Hệ thống sẽ kiểm tra xem client đã có sẵn thư mục `.agents/` hay chưa. Nếu đã có sẵn, hệ thống sẽ tận dụng thư mục này và chỉ đồng bộ nội dung bên trong mà không khởi tạo lại từ đầu để tránh gây hiểu nhầm về sự trùng lặp. Nếu chưa có, hệ thống sẽ tự động tạo mới thư mục `.agents/`.
+- **Đưa `sk-specs` vào `.agents/`**: Khi đồng bộ, hệ thống tự động sao chép toàn bộ bản sao repository `sk-specs` (bao gồm rules, skills, workflows, templates, script đồng bộ và `package.json`) vào thư mục `.agents/sk-specs/` của client để lưu trữ bản sao lưu đầy đủ.
+- **Tự động bỏ qua tự sao chép khi chạy trực tiếp**: Nếu bạn chạy đồng bộ trực tiếp từ trong thư mục con `.agents/sk-specs/` của client (ví dụ chạy `node sync.js` hoặc `./sync-agents.sh ../..`), hệ thống sẽ phát hiện ra điều này và chỉ đồng bộ các thư mục quy tắc `rules/`, `skills/`, `workflows/` lên thư mục cha `.agents/` mà không thực hiện tự ghi đè/nhân bản file trên chính nó.
 - **Quy tắc & Quy trình**: Các thư mục `rules/`, `skills/`, `workflows/`, `templates/` sẽ được xóa sạch ở client và copy mới để đồng bộ các cập nhật quy chuẩn mới nhất.
 - **Dữ liệu thực tế**: Các thư mục chứa dữ liệu tiến độ thực tế bao gồm `active/`, `completed/`, `archived/` sẽ **chỉ được tạo nếu chưa có** và **hoàn toàn không bị ghi đè hay xóa bỏ** nếu đã tồn tại, đảm bảo không làm mất dữ liệu công việc hiện tại của các agent ở dự án client.
 
