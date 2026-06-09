@@ -48,6 +48,30 @@
 > Trong repository này (`sk-specs`), các thư mục `rules/`, `skills/`, và `workflows/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
 > Khi tích hợp vào dự án Client (Workspace), các thư mục này sẽ được đặt bên trong thư mục con `.agents/` (ví dụ: `.agents/rules/`, `.agents/skills/`, `.agents/workflows/`).
 
+# HƯỚNG DẪN CÀI ĐẶT & ĐỒNG BỘ (INSTALLATION & SYNC)
+
+Để tích hợp cấu trúc Multi-Agent này vào dự án client (Workspace), bạn có thể sử dụng một trong hai phương thức sau:
+
+### Cách 1: Sử dụng `npx` (Khuyên dùng khi lấy trực tiếp từ GitHub)
+Mở terminal tại thư mục gốc của dự án client và chạy lệnh:
+```bash
+npx github:sunkid1995/sk-specs
+```
+Lệnh này sẽ tự động tải các quy chuẩn mới nhất, khởi tạo thư mục `.agents/` nếu chưa có và đồng bộ toàn bộ rules, skills, workflows, templates vào dự án của bạn.
+
+### Cách 2: Sử dụng Script Bash cục bộ
+Nếu bạn đã sao chép repository này về máy, hãy chạy script từ thư mục của repository này:
+```bash
+./sync-agents.sh <đường-dẫn-đến-dự-án-client>
+```
+Ví dụ:
+```bash
+./sync-agents.sh ../my-client-project
+```
+
+> [!IMPORTANT]
+> Cả hai phương thức trên đều tự động bảo vệ dữ liệu thực tế: Các thư mục chứa tiến độ công việc thực tế của Agent (`active/`, `completed/`, `archived/`) sẽ **không bao giờ bị ghi đè hoặc xóa bỏ** nếu đã tồn tại ở dự án client.
+
 # PURPOSE OF EACH LAYER
 
 ## rules/

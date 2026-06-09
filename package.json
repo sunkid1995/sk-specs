@@ -1,0 +1,21 @@
+{
+  "name": "sk-specs",
+  "version": "1.0.0",
+  "description": "Công cụ đồng bộ cấu hình và biểu mẫu quản lý Multi-Agent",
+  "type": "module",
+  "bin": {
+    "sk-specs": "./sync.js"
+  },
+  "scripts": {
+    "sync": "node sync.js"
+  },
+  "keywords": [
+    "multi-agent",
+    "agent",
+    "workflows",
+    "rules",
+    "specs"
+  ],
+  "author": "sunkid",
+  "license": "ISC"
+}
