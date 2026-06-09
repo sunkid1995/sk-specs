@@ -99,11 +99,11 @@ Sau khi đồng bộ, thư mục `.agents/` tại dự án client sẽ có cấu
 Bạn có thể thực hiện đồng bộ hóa quy tắc bằng hai phương thức chính:
 
 ### Phương thức 1: Sử dụng `npx` (Khuyên dùng khi kéo từ Github/NPM)
-Người dùng chỉ cần đứng tại thư mục gốc của dự án client và khởi chạy trực tiếp lệnh npx để kéo bản cập nhật mới nhất từ repository:
+Người dùng chỉ cần đứng tại thư mục gốc của dự án client và khởi chạy trực tiếp lệnh npx bằng cách chỉ định rõ gói thông qua `-p` và tên binary `sk-specs` ở cuối:
 ```bash
-npx github:sunkid1995/sk-specs
+npx -p github:sunkid1995/sk-specs sk-specs
 ```
-Lệnh này sẽ tự động chạy script Node.js (`sync.js`), nhận diện thư mục hiện hành và thực hiện đồng bộ đè cấu hình vào thư mục `.agents/`.
+Lệnh này sẽ tự động tải repository, chạy script Node.js (`sync.js`), nhận diện thư mục hiện hành và thực hiện đồng bộ đè cấu hình vào thư mục `.agents/`.
 
 ### Phương thức 2: Chạy trực tiếp Script Bash
 Chạy script đồng bộ cục bộ từ thư mục của `sk-specs` sang dự án client:

@@ -58,11 +58,13 @@ Dự án này giúp nhiều AI Agent có thể cộng tác làm việc cùng nha
 Để tích hợp cấu trúc Multi-Agent này vào dự án client (Workspace), bạn có thể sử dụng một trong hai phương thức sau:
 
 ### Cách 1: Sử dụng `npx` (Khuyên dùng khi lấy trực tiếp từ GitHub)
-Mở terminal tại thư mục gốc của dự án client và chạy lệnh (chỉ định rõ nhánh thử nghiệm `feat/support-multi-agent` nếu chưa merge vào nhánh chính):
+Do hạn chế của npm trong việc tự động suy đoán tên lệnh từ Git URL, bạn cần chỉ định rõ gói cài đặt thông qua `-p` và tên lệnh thực thi ở cuối.
+
+Mở terminal tại thư mục gốc của dự án client và chạy lệnh:
 ```bash
-npx github:sunkid1995/sk-specs#feat/support-multi-agent
+npx -p github:sunkid1995/sk-specs sk-specs
 ```
-Lệnh này sẽ tự động tải các quy chuẩn mới nhất của nhánh thử nghiệm, khởi tạo thư mục `.agents/` nếu chưa có và đồng bộ toàn bộ rules, skills, workflows, templates vào dự án của bạn. Khi nhánh này được merge vào nhánh chính (`main`), bạn có thể bỏ phần hash nhánh (`#feat/support-multi-agent`).
+Lệnh này sẽ tự động tải các quy chuẩn mới nhất, khởi tạo thư mục `.agents/` nếu chưa có và đồng bộ toàn bộ rules, skills, workflows, templates vào dự án của bạn.
 
 ### Cách 2: Sử dụng Script Bash cục bộ
 Nếu bạn đã sao chép repository này về máy, hãy chạy script từ thư mục của repository này:
