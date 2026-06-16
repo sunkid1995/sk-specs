@@ -12,7 +12,7 @@ const srcDir = path.resolve(__dirname);
 // Xác định thư mục đích (thư mục hiện hành nơi chạy npx - Client Project)
 const clientDir = process.cwd();
 
-console.log("Bắt đầu đồng bộ cấu hình Multi-Agent...");
+console.log("Bắt đầu đồng bộ cấu hình quy trình phát triển phần mềm...");
 console.log(`Thư mục nguồn (sk-specs): ${srcDir}`);
 console.log(`Thư mục đích (Client): ${clientDir}`);
 
@@ -114,4 +114,4 @@ if (process.platform !== 'win32') {
     }
 }
 
-console.log("Đồng bộ cấu hình Multi-Agent hoàn tất thành công!");
+console.log("Đồng bộ cấu hình quy trình phát triển phần mềm hoàn tất thành công!");

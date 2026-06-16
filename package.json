@@ -1,7 +1,7 @@
 {
   "name": "sk-specs",
   "version": "1.0.0",
-  "description": "Công cụ đồng bộ cấu hình và biểu mẫu quản lý Multi-Agent",
+  "description": "Công cụ đồng bộ cấu hình và quy trình phát triển phần mềm hỗ trợ bởi AI Agent",
   "type": "module",
   "bin": {
     "sk-specs": "./sync.js"
