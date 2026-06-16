@@ -81,7 +81,7 @@ Dự án này giúp nhiều AI Agent có thể cộng tác làm việc cùng nha
 
 > [!NOTE]
 > Trong repository này (`sk-specs`), các thư mục `rules/`, `skills/`, và `workflows/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
-> Khi tích hợp vào dự án Client (Workspace), toàn bộ repository sẽ được copy gọn gàng vào bên trong `.agents/sk-specs/` (ví dụ: `.agents/sk-specs/rules/`, `.agents/sk-specs/skills/`, v.v.), giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè đè lên các rule/skill riêng của dự án client).
+> Khi tích hợp vào dự án Client (Workspace), toàn bộ repository sẽ được copy gọn gàng vào bên trong `sk-specs/` (ví dụ: `sk-specs/rules/`, `sk-specs/skills/`, v.v.), giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè đè lên các rule/skill riêng của dự án client).
 
 # HƯỚNG DẪN CÀI ĐẶT & ĐỒNG BỘ (INSTALLATION & SYNC)
 
@@ -115,12 +115,12 @@ Ví dụ:
 
 | Lệnh | Workflow kích hoạt | Hành động của Agent |
 | :--- | :--- | :--- |
-| `/ba <mô-tả>` | Business Analysis | Tạo hoặc cập nhật `ba.md` và dừng tại Checkpoint 1 (BA Approval). |
-| `/feature <mô-tả>` | Feature Development | Kiểm tra `ba.md`, tạo `feature.md` và dừng tại Checkpoint 2 (Design Approval). |
-| `/bugfix <mô-tả>` | Bug Fix | Phân tích bug, lập kế hoạch sửa lỗi trong `fix-bug.md` và dừng tại Checkpoint 2. |
-| `/refactor <mô-tả>`| Safe Refactoring | Lập kế hoạch tái cấu trúc trong `refactor.md` và dừng tại Checkpoint 2. |
-| `/review` | Code Review | Tự động quét diff các file đã thay đổi và sinh đánh giá trong `review.md`. |
-| `/continue` | Resume Progress | Tự động đọc spec hiện tại và tiếp tục công việc đang dang dở. |
+| `/sk-ba <mô-tả>` | Business Analysis | Tạo hoặc cập nhật `ba.md` và dừng tại Checkpoint 1 (BA Approval). |
+| `/sk-feature <mô-tả>` | Feature Development | Kiểm tra `ba.md`, tạo `feature.md` và dừng tại Checkpoint 2 (Design Approval). |
+| `/sk-bugfix <mô-tả>` | Bug Fix | Phân tích bug, lập kế hoạch sửa lỗi trong `fix-bug.md` và dừng tại Checkpoint 2. |
+| `/sk-refactor <mô-tả>`| Safe Refactoring | Lập kế hoạch tái cấu trúc trong `refactor.md` và dừng tại Checkpoint 2. |
+| `/sk-review` | Code Review | Tự động quét diff các file đã thay đổi và sinh đánh giá trong `review.md`. |
+| `/sk-continue` | Resume Progress | Tự động đọc spec hiện tại và tiếp tục công việc đang dang dở. |
 | `/sync` / `/update` | Synchronize Rules | Hướng dẫn hoặc chạy script đồng bộ hóa rules từ upstream repository. |
 
 Chi tiết cấu hình các lệnh có thể xem tại thư mục [commands/](commands/).
@@ -190,13 +190,13 @@ Custom Slash Commands registered to Antigravity IDE.
 
 Responsible for:
 
-- registering custom slash commands (e.g., `/ba`, `/feature`, `/bugfix`, `/refactor`, `/review`, `/continue`)
+- registering custom slash commands (e.g., `/sk-ba`, `/sk-feature`, `/sk-bugfix`, `/sk-refactor`, `/sk-review`, `/sk-continue`)
 - orchestrating specific workflows and template file generation
 - defining interactive checkpoint approvals with the user
 
 ---
 
-## .agents/sk-specs/
+## sk-specs/
 
 Persistent engineering context shared across agents.
 
@@ -222,7 +222,7 @@ All outputs generated from:
 should automatically persist into:
 
 ```txt
-.agents/sk-specs/<work-item-name>/
+sk-specs/<work-item-name>/
 ```
 
 without requiring explicit user instructions.
@@ -234,7 +234,7 @@ without requiring explicit user instructions.
 ## Feature Workflow
 
 ```txt
-.agents/sk-specs/<feature-name>/
+sk-specs/<feature-name>/
 ├── ba.md
 ├── feature.md
 ├── review.md
@@ -248,7 +248,7 @@ without requiring explicit user instructions.
 ## Bugfix Workflow
 
 ```txt
-.agents/sk-specs/<bug-name>/
+sk-specs/<bug-name>/
 ├── ba.md
 ├── fix-bug.md
 ├── review.md
@@ -262,7 +262,7 @@ without requiring explicit user instructions.
 ## Refactor Workflow
 
 ```txt
-.agents/sk-specs/<refactor-name>/
+sk-specs/<refactor-name>/
 ├── ba.md
 ├── refactor.md
 ├── review.md
@@ -276,7 +276,7 @@ without requiring explicit user instructions.
 Before generating new outputs:
 
 1. Automatically search existing specs in:
-   `.agents/sk-specs/`
+   `sk-specs/`
 
 2. Automatically load:
    - feature analysis
@@ -448,5 +448,5 @@ Idea
 All stages share the same persistent engineering context through:
 
 ```txt
-.agents/sk-specs/
+sk-specs/
 ```

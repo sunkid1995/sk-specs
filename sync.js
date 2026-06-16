@@ -49,17 +49,17 @@ function copyDirSync(src, dest) {
     }
 }
 
-// Đồng bộ bản sao repo sk-specs vào .agents/sk-specs/
+// Đồng bộ bản sao repo sk-specs vào sk-specs/
 const targetSkSpecsDir = path.join(targetAgentsDir, 'sk-specs');
 
 // Kiểm tra xem có phải đang chạy trực tiếp từ trong thư mục .agents/sk-specs của client không
 if (srcDir === targetSkSpecsDir) {
     console.log("- Đang chạy trực tiếp từ thư mục .agents/sk-specs của dự án client. Không cần tự nhân bản.");
 } else {
-    console.log("Đang đồng bộ cấu hình sk-specs vào .agents/sk-specs/...");
+    console.log("Đang đồng bộ cấu hình sk-specs vào sk-specs/...");
     fs.mkdirSync(targetSkSpecsDir, { recursive: true });
 
-    // Copy các file tĩnh của repo vào .agents/sk-specs/
+    // Copy các file tĩnh của repo vào sk-specs/
     const staticFiles = ['README.md', 'PROJECT_STRUCTURE.md', 'sync-agents.sh', 'sync.js', 'package.json'];
     for (let file of staticFiles) {
         const srcFile = path.join(srcDir, file);
@@ -69,7 +69,7 @@ if (srcDir === targetSkSpecsDir) {
         }
     }
 
-    // Sao chép các thư mục rules, skills, workflows, templates vào trong .agents/sk-specs/
+    // Sao chép các thư mục rules, skills, workflows, templates vào trong sk-specs/
     const subFoldersToCopy = ['rules', 'skills', 'workflows', 'templates'];
     for (let folder of subFoldersToCopy) {
         const srcFolder = path.join(srcDir, folder);
@@ -93,15 +93,16 @@ if (srcDir === targetSkSpecsDir) {
     }
 }
 
-// Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại
+// Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại tại root của client workspace
+const clientSkSpecsDir = path.join(clientDir, 'sk-specs');
 const progressFolders = ['active', 'completed', 'archived'];
 for (let folder of progressFolders) {
-    const folderPath = path.join(targetSkSpecsDir, folder);
+    const folderPath = path.join(clientSkSpecsDir, folder);
     if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });
     }
 }
-console.log("- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại");
+console.log("- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại tại root của client workspace");
 
 // Cấp quyền thực thi cho các script nếu chạy trên macOS/Linux
 if (process.platform !== 'win32') {

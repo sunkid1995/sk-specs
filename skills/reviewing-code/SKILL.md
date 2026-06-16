@@ -179,7 +179,7 @@ For this project (FPT Chat / CVX), always verify:
 
 ## Integration with Spec Persistence
 
-When reviewing code for a tracked feature/refactor/bugfix:
+When reviewing code for a tracked feature/sk-refactor/sk-bugfix:
 
 - Reference existing specs in `sk-specs/`
 - Verify implementation matches architecture spec

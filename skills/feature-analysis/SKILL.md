@@ -9,7 +9,7 @@ description: Analyze features, requirements, state management needs, and archite
 graph TD
     Start([Bắt đầu Phân tích Tính năng]) --> VerifyBA[1. Xác thực ba.md tồn tại & đã duyệt]
     VerifyBA --> CheckBA{ba.md đã được duyệt?}
-    CheckBA -- Chưa --> TriggerBA[Kích hoạt quy trình /ba trước] --> VerifyBA
+    CheckBA -- Chưa --> TriggerBA[Kích hoạt quy trình /sk-ba trước] --> VerifyBA
     CheckBA -- Rồi --> CreateFeature[2. Tạo/Cập nhật feature.md theo template]
     CreateFeature --> PhasedPlan[3. Lập kế hoạch phân rã phases & ưu tiên data layer]
     PhasedPlan --> DefineRisks[4. Đánh giá rủi ro kiến trúc & lập test cases]

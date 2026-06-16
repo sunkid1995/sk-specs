@@ -37,7 +37,7 @@
 
 ## Ngoài Phạm vi (Out Of Scope)
 
-- [Các chức năng sẽ không được thực hiện trong phạm vi task/feature này]
+- [Các chức năng sẽ không được thực hiện trong phạm vi task/sk-feature này]
 
 ## Rủi ro (Risks)
 

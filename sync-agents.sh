@@ -43,7 +43,7 @@ if [ "$SCRIPT_DIR_ABS" = "$TARGET_AGENTS_DIR/sk-specs" ]; then
     echo "- Đang chạy trực tiếp từ thư mục .agents/sk-specs của dự án client. Không cần tự nhân bản."
 else
     # Đồng bộ bản sao của toàn bộ repo sk-specs vào trong TARGET_AGENTS_DIR/sk-specs/
-    echo "Đang đồng bộ cấu hình sk-specs vào .agents/sk-specs/..."
+    echo "Đang đồng bộ cấu hình sk-specs vào sk-specs/..."
     mkdir -p "$TARGET_AGENTS_DIR/sk-specs"
 
     # Copy các file tĩnh
@@ -78,10 +78,10 @@ else
     echo "- Đã đồng bộ các file Custom Commands ra .agents/skills/ (Slash Commands)"
 fi
 
-# Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại
-mkdir -p "$TARGET_AGENTS_DIR/sk-specs/active"
-mkdir -p "$TARGET_AGENTS_DIR/sk-specs/completed"
-mkdir -p "$TARGET_AGENTS_DIR/sk-specs/archived"
-echo "- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại"
+# Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại tại root của client workspace
+mkdir -p "$CLIENT_DIR_ABS/sk-specs/active"
+mkdir -p "$CLIENT_DIR_ABS/sk-specs/completed"
+mkdir -p "$CLIENT_DIR_ABS/sk-specs/archived"
+echo "- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại tại root của client workspace"
 
 echo "Đồng bộ cấu hình Multi-Agent hoàn tất thành công!"

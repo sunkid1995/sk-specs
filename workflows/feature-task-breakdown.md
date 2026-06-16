@@ -24,7 +24,7 @@ version: 1.0.0
   - Validation Scope (how to verify it works)
 
 ## 3. Checklist Initialization
-- Automatically create `progress.md` under `.agents/sk-specs/active/<work-item-name>/` using `templates/progress.md`.
+- Automatically create `progress.md` under `sk-specs/active/<work-item-name>/` using `templates/progress.md`.
 - Populate `progress.md` with the checklist of tasks (marked as `[ ]`).
 - Present the tasks checklist to the user for reference.
 

@@ -1,6 +1,6 @@
 ---
 name: slash-commands
-description: Slash command system definition (/ba, /feature, /bugfix, /refactor, /review, /continue, /sync).
+description: Slash command system definition (/sk-ba, /sk-feature, /sk-bugfix, /sk-refactor, /sk-review, /sk-continue, /sync).
 version: 1.0.0
 ---
 
@@ -10,46 +10,46 @@ When the user enters a prompt starting with a slash (`/`), the Agent MUST immedi
 
 ## SUPPORTED COMMANDS
 
-### 1. `/ba [description]`
+### 1. `/sk-ba [description]`
 - **Goal**: Initialize or update the Business Analysis phase.
 - **Action**:
-  - Automatically create or update `ba.md` under `.agents/sk-specs/active/<work-item-name>/`.
+  - Automatically create or update `ba.md` under `sk-specs/active/<work-item-name>/`.
   - Analyze the provided `[description]` or requirements.
   - Output the generated `ba.md` content and stop at the **BA Checkpoint**: *"Bạn có muốn thay đổi hay bổ sung gì cho tài liệu Phân tích Nghiệp vụ (BA) này không?"*.
 
-### 2. `/feature [description]`
+### 2. `/sk-feature [description]`
 - **Goal**: Initialize the Feature Development workflow.
 - **Action**:
-  - Verify if `ba.md` exists and is approved. If not, fall back to executing `/ba` first.
-  - Create or update `feature.md` under `.agents/sk-specs/active/<work-item-name>/`.
+  - Verify if `ba.md` exists and is approved. If not, fall back to executing `/sk-ba` first.
+  - Create or update `feature.md` under `sk-specs/active/<work-item-name>/`.
   - Outline design, architecture decisions, and implementation plan.
   - Output `feature.md` content and stop at the **Design Checkpoint**: *"Bạn có muốn chỉnh sửa gì trong thiết kế kỹ thuật/kế hoạch triển khai này không?"*.
 
-### 3. `/bugfix [description]`
+### 3. `/sk-bugfix [description]`
 - **Goal**: Initialize the Bug Fix workflow.
 - **Action**:
-  - Automatically create or update `fix-bug.md` under `.agents/sk-specs/active/<work-item-name>/`.
+  - Automatically create or update `fix-bug.md` under `sk-specs/active/<work-item-name>/`.
   - Analyze the bug description, list reproduction steps, and propose the fix.
   - Output `fix-bug.md` content and stop at the **Design Checkpoint** (Plan Fix approval).
 
-### 4. `/refactor [description]`
+### 4. `/sk-refactor [description]`
 - **Goal**: Initialize the Safe Refactoring workflow.
 - **Action**:
-  - Automatically create or update `refactor.md` under `.agents/sk-specs/active/<work-item-name>/`.
+  - Automatically create or update `refactor.md` under `sk-specs/active/<work-item-name>/`.
   - Assess dependency risks and plan the refactoring steps.
   - Output `refactor.md` content and stop at the **Design Checkpoint** (Plan Refactor approval).
 
-### 5. `/review`
+### 5. `/sk-review`
 - **Goal**: Trigger the Code Review phase.
 - **Action**:
   - Inspect changed files in the workspace (using diff tools).
   - Automatically generate `review.md` comparing implemented code with requirements in `ba.md`.
   - Present the code review checklist and comments directly.
 
-### 6. `/continue`
+### 6. `/sk-continue`
 - **Goal**: Resume the interrupted work item.
 - **Action**:
-  - Read existing spec files in `.agents/sk-specs/active/` to identify the active work item.
+  - Read existing spec files in `sk-specs/active/` to identify the active work item.
   - Scan the latest state in `progress.md`.
   - Report the current state and automatically resume the next pending task.
 

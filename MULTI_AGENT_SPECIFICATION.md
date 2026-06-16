@@ -6,7 +6,7 @@ Tài liệu này mô tả kiến trúc và quy trình cộng tác giữa nhiều
 
 ## 1. Sơ đồ Kiến trúc & Luồng Dữ liệu
 
-Dưới đây là sơ đồ mô tả cách thức đồng bộ cấu hình từ kho chứa mẫu (`sk-specs`) sang dự án client, cùng cách các AI Agent tương tác chung trên thư mục đặc tả `.agents/sk-specs/active/`:
+Dưới đây là sơ đồ mô tả cách thức đồng bộ cấu hình từ kho chứa mẫu (`sk-specs`) sang dự án client, cùng cách các AI Agent tương tác chung trên thư mục đặc tả `sk-specs/active/`:
 
 ```mermaid
 graph TD
@@ -53,7 +53,7 @@ graph TD
 ## 2. Nguyên lý Hoạt động của Mô hình Multi-Agent
 
 Hệ thống hoạt động dựa trên hai cơ chế cốt lõi được định nghĩa trong thư mục `rules/`:
-1. **Spec Loading (`spec-loading.md`)**: Trước khi bắt đầu thực hiện bất kỳ nhiệm vụ nào (Feature, Bugfix, Refactor), AI Agent bắt buộc phải quét thư mục `.agents/sk-specs/` để tải lên các quyết định kiến trúc (`decisions.md`), phân tích nghiệp vụ (`ba.md`), và tiến độ hiện tại (`progress.md`).
+1. **Spec Loading (`spec-loading.md`)**: Trước khi bắt đầu thực hiện bất kỳ nhiệm vụ nào (Feature, Bugfix, Refactor), AI Agent bắt buộc phải quét thư mục `sk-specs/` để tải lên các quyết định kiến trúc (`decisions.md`), phân tích nghiệp vụ (`ba.md`), và tiến độ hiện tại (`progress.md`).
 2. **Spec Persistence (`spec-persistence.md`)**: Trong và sau quá trình làm việc, Agent tự động cập nhật tiến độ vào file `progress.md` và ghi nhận các quyết định vào `decisions.md`. 
 
 Nhờ cơ chế này:
@@ -82,8 +82,8 @@ Sau khi đồng bộ, thư mục `.agents/` tại dự án client sẽ có cấu
 │   ├── feature-analysis.md
 │   └── fix-bug.md
 └── sk-specs/               # Nơi lưu trữ thông tin nghiệp vụ và tiến độ cộng tác
-    ├── active/             # Các task/feature đang được thực hiện (mỗi task là 1 thư mục con)
-    ├── completed/          # Các task/feature đã hoàn thành
+    ├── active/             # Các task/sk-feature đang được thực hiện (mỗi task là 1 thư mục con)
+    ├── completed/          # Các task/sk-feature đã hoàn thành
     ├── archived/           # Các tài liệu đã lưu trữ lịch sử
     └── templates/          # Các file biểu mẫu chuẩn được copy từ sk-specs sang
         ├── ba.md           # Mẫu Business Analysis
@@ -113,8 +113,8 @@ Chạy script đồng bộ cục bộ từ thư mục của `sk-specs` sang dự
 
 ### Cách xử lý ghi đè an toàn:
 - **Thư mục gốc cấu hình (`.agents/`)**: Hệ thống sẽ kiểm tra xem client đã có sẵn thư mục `.agents/` hay chưa. Nếu đã có sẵn, hệ thống sẽ tận dụng thư mục này và chỉ đồng bộ nội dung bên trong mà không khởi tạo lại từ đầu để tránh gây hiểu nhầm về sự trùng lặp. Nếu chưa có, hệ thống sẽ tự động tạo mới thư mục `.agents/`.
-- **Đưa `sk-specs` vào `.agents/`**: Khi đồng bộ, hệ thống tự động sao chép toàn bộ bản sao repository `sk-specs` (bao gồm rules, skills, workflows, templates, script đồng bộ và `package.json`) vào thư mục `.agents/sk-specs/` của client để lưu trữ bản sao lưu đầy đủ.
-- **Tự động bỏ qua tự sao chép khi chạy trực tiếp**: Nếu bạn chạy đồng bộ trực tiếp từ trong thư mục con `.agents/sk-specs/` của client (ví dụ chạy `node sync.js` hoặc `./sync-agents.sh ../..`), hệ thống sẽ phát hiện ra điều này và chỉ đồng bộ các thư mục quy tắc `rules/`, `skills/`, `workflows/` lên thư mục cha `.agents/` mà không thực hiện tự ghi đè/nhân bản file trên chính nó.
+- **Đưa `sk-specs` vào `.agents/`**: Khi đồng bộ, hệ thống tự động sao chép toàn bộ bản sao repository `sk-specs` (bao gồm rules, skills, workflows, templates, script đồng bộ và `package.json`) vào thư mục `sk-specs/` của client để lưu trữ bản sao lưu đầy đủ.
+- **Tự động bỏ qua tự sao chép khi chạy trực tiếp**: Nếu bạn chạy đồng bộ trực tiếp từ trong thư mục con `sk-specs/` của client (ví dụ chạy `node sync.js` hoặc `./sync-agents.sh ../..`), hệ thống sẽ phát hiện ra điều này và chỉ đồng bộ các thư mục quy tắc `rules/`, `skills/`, `workflows/` lên thư mục cha `.agents/` mà không thực hiện tự ghi đè/nhân bản file trên chính nó.
 - **Quy tắc & Quy trình**: Các thư mục `rules/`, `skills/`, `workflows/`, `templates/` sẽ được xóa sạch ở client và copy mới để đồng bộ các cập nhật quy chuẩn mới nhất.
 - **Dữ liệu thực tế**: Các thư mục chứa dữ liệu tiến độ thực tế bao gồm `active/`, `completed/`, `archived/` sẽ **chỉ được tạo nếu chưa có** và **hoàn toàn không bị ghi đè hay xóa bỏ** nếu đã tồn tại, đảm bảo không làm mất dữ liệu công việc hiện tại của các agent ở dự án client.
 
@@ -125,7 +125,7 @@ Chạy script đồng bộ cục bộ từ thư mục của `sk-specs` sang dự
 Một điểm quan trọng trong thiết kế hệ thống Multi-Agent là **bạn không cần chạy lại script `sync-agents.sh` khi chuyển đổi công việc qua lại giữa các Agent**.
 
 ### Thư mục cấu hình bắt buộc:
-*   **Thư mục `.agents/` (luôn có chữ 's')**: Đây là thư mục chuẩn được Agent tự động đọc để áp dụng rules/skills/workflows. Tuyệt đối không đặt tên là `.agent` để tránh lỗi cấu hình. Dữ liệu tiến độ hoạt động thực tế nằm tại `.agents/sk-specs/active/`.
+*   **Thư mục `.agents/` (luôn có chữ 's')**: Đây là thư mục chuẩn được Agent tự động đọc để áp dụng rules/skills/workflows. Tuyệt đối không đặt tên là `.agent` để tránh lỗi cấu hình. Dữ liệu tiến độ hoạt động thực tế nằm tại `sk-specs/active/`.
 
 ### Quy trình chuyển giao tự động với Checkpoint phản hồi:
 Khi chuyển giao công việc từ Agent này sang Agent khác, quy trình diễn ra khép kín qua các bước cùng các điểm kiểm duyệt (Checkpoints) bắt buộc:
