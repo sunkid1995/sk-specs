@@ -6,6 +6,20 @@ version: 2.1.0
 
 # REQUIRED INPUT
 
+```mermaid
+graph TD
+    Start([Bắt đầu Sửa lỗi]) --> Investigate[1. Định vị module lỗi & lập đường tái hiện]
+    Investigate --> WriteFailedTest[Viết unit test lỗi tái hiện lỗi tự động]
+    WriteFailedTest --> RCA_Whys[2. Thực hiện 5 Whys tìm nguyên nhân gốc rễ và ghi fix-bug.md]
+    RCA_Whys --> Checkpoint[3. Plan Approval Checkpoint]
+    Checkpoint --> WaitUser{User phê duyệt Kế hoạch Sửa lỗi?}
+    WaitUser -- Không/Chỉnh sửa --> UpdatePlan[Cập nhật kế hoạch/fix-bug.md] --> Checkpoint
+    WaitUser -- Có --> ApplyFix[4. Triển khai code sửa lỗi targeted minimal]
+    ApplyFix --> VerifyFix[Chạy test case tái hiện xem đã xanh chưa]
+    VerifyFix --> RunAllTests[Chạy test suite & 10+ validation tests]
+    RunAllTests --> End([Hoàn thành Sửa lỗi an toàn])
+```
+
 - ba.md (Retrieve existing or create via reverse-engineering if legacy code)
 - old-test-cases
 

@@ -6,6 +6,17 @@ version: 1.0.0
 
 # REQUIRED INPUT
 
+```mermaid
+graph TD
+    Start([Bắt đầu Thiết kế Kiến trúc]) --> ReadBA[1. Đọc ba.md & xác định phạm vi modules/views/endpoints]
+    ReadBA --> DirDesign[2. Thiết kế thư mục & component theo chuẩn Folder-First]
+    DirDesign --> MapState[3. Định nghĩa Zustand actions/selectors, TanStack Query caching & Local Storage flow]
+    MapState --> Checkpoint[4. Architecture Review Checkpoint]
+    Checkpoint --> WaitUser{User đồng ý Bản thiết kế kiến trúc?}
+    WaitUser -- Không/Chỉnh sửa --> UpdateArch[Cập nhật thiết kế kiến trúc] --> Checkpoint
+    WaitUser -- Có --> End([Hoàn thành Thiết kế - Sẵn sàng Phân rã task])
+```
+
 - ba.md
 - Feature description context
 

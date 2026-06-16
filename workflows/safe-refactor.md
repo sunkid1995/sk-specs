@@ -6,6 +6,20 @@ version: 2.1.0
 
 # REQUIRED INPUT
 
+```mermaid
+graph TD
+    Start([Bắt đầu Refactor]) --> MapDep[1. Phân tích dependencies của target module]
+    MapDep --> RunBase[Chạy bộ test suite baseline để đảm bảo code đang xanh]
+    RunBase --> DocumentGoals[Ghi nhận vấn đề & mục tiêu vào refactor.md]
+    DocumentGoals --> Checkpoint[2. Refactor Plan Approval Checkpoint]
+    Checkpoint --> WaitUser{User phê duyệt Kế hoạch Refactor?}
+    WaitUser -- Không/Chỉnh sửa --> UpdatePlan[Cập nhật refactor.md] --> Checkpoint
+    WaitUser -- Có --> IncrementalCode[3. Sửa code từng bước nhỏ & chạy test liên tục]
+    IncrementalCode --> VerifyParity[4. Kiểm tra UI Parity & Zustand State Integrity]
+    VerifyParity --> RunAllTests[Chạy full test suite & 10+ validation tests]
+    RunAllTests --> End([Hoàn thành Refactor an toàn])
+```
+
 - ba.md (Retrieve existing or create via reverse-engineering if legacy code)
 - old-test-cases
 
@@ -13,7 +27,7 @@ version: 2.1.0
 
 ## 1. Dependency Analysis & Baseline Check
 - Map the target module's import/export dependencies.
-- Run all existing test cases (`npm run test` or `vitest`) to verify that the current codebase is green.
+- Run all existing test cases (`yarn test`, `npm run test`, `yarn test:jest`, or `vitest`) to verify that the current codebase is green.
 - Document current problems, refactor goals, and initial state in `refactor.md` (under `.agents/sk-specs/active/<work-item-name>/` using `templates/refactor.md`).
 
 ## 2. Refactor Plan Approval (Blocking)

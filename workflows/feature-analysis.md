@@ -6,6 +6,20 @@ version: 2.0.0
 
 # REQUIRED INPUT
 
+```mermaid
+graph TD
+    Start([Bắt đầu Phân tích Tính năng]) --> VerifyBA[1. Kiểm tra sự tồn tại & duyệt của ba.md]
+    VerifyBA --> CheckBA{ba.md đã được duyệt?}
+    CheckBA -- Chưa --> RunBA[Kích hoạt quy trình /ba trước] --> VerifyBA
+    CheckBA -- Rồi --> CreateFeature[2. Tạo/Cập nhật feature.md theo templates/feature.md]
+    CreateFeature --> DetailArch[Mô tả State Management, Reusable Modules, Technical Risks]
+    DetailArch --> PhasePlan[3. Phân chia phases triển khai & ưu tiên data layer]
+    PhasePlan --> Checkpoint[4. Design Approval Checkpoint]
+    Checkpoint --> WaitUser{User phê duyệt Kế hoạch Thiết kế?}
+    WaitUser -- Không/Chỉnh sửa --> UpdateFeature[Cập nhật feature.md] --> Checkpoint
+    WaitUser -- Có --> End([Hoàn thành Thiết kế - Sẵn sàng Code])
+```
+
 - ba.md (Approved under `.agents/sk-specs/active/<work-item-name>/`)
 
 # WORKFLOW STEPS

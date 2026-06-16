@@ -5,6 +5,20 @@ description: Define safe refactoring principles, restrictions, and preferred pat
 
 # Refactoring Principles & Workflow
 
+```mermaid
+graph TD
+    Start([Bắt đầu Refactor]) --> AnalyzeDep[1. Phân tích dependency & imports]
+    AnalyzeDep --> RunBaseTests[2. Chạy bộ test suite hiện tại baseline green]
+    RunBaseTests --> DocumentProblems[3. Ghi nhận vấn đề & mục tiêu vào refactor.md]
+    DocumentProblems --> DesignCheckpoint[4. Refactor Plan Approval Checkpoint]
+    DesignCheckpoint --> WaitUser{User đồng ý Kế hoạch Refactor?}
+    WaitUser -- Không/Chỉnh sửa --> UpdatePlan[Cập nhật refactor.md] --> DesignCheckpoint
+    WaitUser -- Có --> IncrementalCode[5. Thực hiện sửa code theo các bước nhỏ]
+    IncrementalCode --> VerifyParity[6. Kiểm tra UI Parity & State Integrity]
+    VerifyParity --> RunTests[7. Chạy bộ test suite và 10+ validation test cases]
+    RunTests --> End([Hoàn thành Refactor an toàn])
+```
+
 ## Core Goal
 Every refactoring process must aim to reduce complexity, improve modularity and testability, and eliminate duplicate logic. 
 

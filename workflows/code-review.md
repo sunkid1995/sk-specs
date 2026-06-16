@@ -6,6 +6,16 @@ version: 2.0.0
 
 # REQUIRED INPUT
 
+```mermaid
+graph TD
+    Start([Bắt đầu Review]) --> VerifyReq[1. Đọc ba.md & feature.md để nắm yêu cầu & design]
+    VerifyReq --> InspectCode[2. Đọc & phân tích toàn bộ code thay đổi trong diff]
+    InspectCode --> MapDimensions[Đối chiếu Correctness, Architecture, Performance, Security...]
+    MapDimensions --> Classify[3. Phân loại mức độ nghiêm trọng bằng emoji 🔴, 🟡, 🔵, 🟢]
+    Classify --> GenReport[4. Tạo báo cáo review.md bằng tiếng Việt gồm 4 phần]
+    GenReport --> End([Hoàn thành Review])
+```
+
 - ba.md
 - feature.md (or refactor.md/fix-bug.md)
 - Code diffs (changes in the workspace)

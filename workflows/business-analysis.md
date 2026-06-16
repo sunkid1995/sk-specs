@@ -6,6 +6,19 @@ version: 2.0.0
 
 # REQUIRED INPUT
 
+```mermaid
+graph TD
+    Start([Bắt đầu Phân tích Nghiệp vụ]) --> GatherInfo[1. Quét user prompt & conversation history]
+    GatherInfo --> CheckMissing{Có thông tin bị thiếu?}
+    CheckMissing -- Có --> Clarify[Hỏi user làm rõ & đề xuất phương án] --> GatherInfo
+    CheckMissing -- Không --> CreateBA[2. Tạo ba.md theo mẫu templates/ba.md]
+    CreateBA --> AC_Def[3. Định nghĩa Acceptance Criteria]
+    AC_Def --> Checkpoint[4. BA Approval Checkpoint]
+    Checkpoint --> WaitUser{User phê duyệt Phân tích BA?}
+    WaitUser -- Không/Chỉnh sửa --> UpdateBA[Chỉnh sửa ba.md] --> Checkpoint
+    WaitUser -- Có --> End([Hoàn thành BA - Chuyển sang Thiết kế])
+```
+
 - Prompt description or requirement context from the user.
 
 # WORKFLOW STEPS
