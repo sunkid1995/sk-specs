@@ -1,5 +1,6 @@
 ---
 name: testing-rules
+description: Testing constraints — Vitest, RTL, colocated test files, 80% coverage requirement, and testing principles.
 version: 1.0.0
 ---
 

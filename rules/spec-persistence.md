@@ -1,5 +1,6 @@
 ---
 name: spec-persistence
+description: Spec persistence behavior — file structure, workflow rules, test case requirements, and progress tracking.
 version: 3.0.0
 ---
 

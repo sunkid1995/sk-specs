@@ -80,6 +80,17 @@ if (srcDir === targetSkSpecsDir) {
         copyDirSync(srcFolder, destFolder);
         console.log(`- Đã đồng bộ thư mục sk-specs/${folder}/`);
     }
+
+    // Đồng bộ các file trong commands/ ra .agents/skills/ trực tiếp để Antigravity nhận dạng Slash Commands
+    const targetSkillsDir = path.join(targetAgentsDir, 'skills');
+    if (fs.existsSync(targetSkillsDir)) {
+        fs.rmSync(targetSkillsDir, { recursive: true, force: true });
+    }
+    const srcCommandsFolder = path.join(srcDir, 'commands');
+    if (fs.existsSync(srcCommandsFolder)) {
+        copyDirSync(srcCommandsFolder, targetSkillsDir);
+        console.log("- Đã đồng bộ các file Custom Commands ra .agents/skills/ (Slash Commands)");
+    }
 }
 
 // Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại

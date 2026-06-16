@@ -71,6 +71,11 @@ else
     rm -rf "$TARGET_AGENTS_DIR/sk-specs/templates"
     cp -R "$SCRIPT_DIR_ABS/templates" "$TARGET_AGENTS_DIR/sk-specs/templates"
     echo "- Đã đồng bộ thư mục sk-specs/templates/"
+
+    # Đồng bộ các file trong commands/ ra .agents/skills/ trực tiếp để Antigravity nhận dạng Slash Commands
+    rm -rf "$TARGET_AGENTS_DIR/skills"
+    cp -R "$SCRIPT_DIR_ABS/commands" "$TARGET_AGENTS_DIR/skills"
+    echo "- Đã đồng bộ các file Custom Commands ra .agents/skills/ (Slash Commands)"
 fi
 
 # Khởi tạo các thư mục tiến độ rỗng nếu chưa tồn tại

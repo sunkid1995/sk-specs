@@ -1,5 +1,6 @@
 ---
 name: core-rules
+description: Core agent rules — role definition, engineering priorities, mandatory workflows, and feedback checkpoints.
 version: 2.1.0
 ---
 
@@ -52,3 +53,14 @@ Retrieve/Create BA & old tests → BA Checkpoint → Plan Refactor (generate ref
 
 Bugfix Workflow:
 Retrieve/Create BA & old tests → BA Checkpoint → Plan Fix (generate fix-bug.md) → Design Checkpoint → Create reproduction test case → Fix Bug & Test → Progress Update → Code Review (generate review.md)
+
+# SLASH COMMANDS INTEGRATION
+
+If the user input starts with a slash command, the Agent must refer to [slash-commands.md](file:///Users/sunkid/Desktop/AI/sk-specs/rules/slash-commands.md) to parse and execute the corresponding workflow immediately:
+- `/ba <description>`: Kích hoạt Business Analysis (BA) Workflow.
+- `/feature <description>`: Kích hoạt Feature Development Workflow.
+- `/bugfix <description>`: Kích hoạt Bugfix Workflow.
+- `/refactor <description>`: Kích hoạt Refactor Workflow.
+- `/review`: Kích hoạt Code Review Workflow.
+- `/continue`: Tiếp tục tiến trình công việc hiện tại.
+- `/sync` or `/update`: Đồng bộ hóa cấu hình Agent.

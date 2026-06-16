@@ -1,3 +1,9 @@
+---
+name: import-rule
+description: Import organization standards — block ordering, comment format, and alphabetical sorting in TypeScript.
+version: 1.0.0
+---
+
 # IMPORT ORGANIZATION RULES
 
 ## IMPORT PRIORITY

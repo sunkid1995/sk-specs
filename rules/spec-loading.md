@@ -1,5 +1,6 @@
 ---
 name: spec-loading
+description: Spec context loading behavior — search and reuse existing decisions and specifications.
 version: 2.0.0
 ---
 

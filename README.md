@@ -7,6 +7,20 @@ Dự án này giúp nhiều AI Agent có thể cộng tác làm việc cùng nha
 ---
 ```txt
 .agents/
+├── skills/
+│   ├── ba/
+│   │   └── SKILL.md
+│   ├── bugfix/
+│   │   └── SKILL.md
+│   ├── continue/
+│   │   └── SKILL.md
+│   ├── feature/
+│   │   └── SKILL.md
+│   ├── refactor/
+│   │   └── SKILL.md
+│   └── review/
+│       └── SKILL.md
+│
 └── sk-specs/
     ├── rules/
     │   ├── architecture-rules.md
@@ -20,16 +34,28 @@ Dự án này giúp nhiều AI Agent có thể cộng tác làm việc cùng nha
     │   └── testing-rules.md
     │
     ├── skills/
-    │   ├── business-analysis.md
-    │   ├── code-review-principles.md
-    │   ├── debugging-patterns.md
-    │   ├── feature-analysis-skill.md
-    │   ├── frontend-stack.md
-    │   ├── performance-optimization.md
-    │   ├── react-zustand-patterns.md
-    │   ├── refactor-principles.md
-    │   ├── regression-safety.md
-    │   └── vietnamese_assistant.md
+    │   ├── business-analysis/
+    │   │   └── SKILL.md
+    │   ├── code-review-principles/
+    │   │   └── SKILL.md
+    │   ├── debugging-patterns/
+    │   │   └── SKILL.md
+    │   ├── feature-analysis/
+    │   │   └── SKILL.md
+    │   ├── frontend-stack/
+    │   │   └── SKILL.md
+    │   ├── performance-optimization/
+    │   │   └── SKILL.md
+    │   ├── react-zustand-patterns/
+    │   │   └── SKILL.md
+    │   ├── refactor-principles/
+    │   │   └── SKILL.md
+    │   ├── regression-safety/
+    │   │   └── SKILL.md
+    │   ├── reviewing-code/
+    │   │   └── SKILL.md
+    │   └── vietnamese-assistant/
+    │       └── SKILL.md
     │
     ├── workflows/
     │   ├── business-analysis.md
@@ -82,6 +108,22 @@ Ví dụ:
 
 > [!IMPORTANT]
 > Cả hai phương thức trên đều tự động bảo vệ dữ liệu thực tế: Các thư mục chứa tiến độ công việc thực tế của Agent (`active/`, `completed/`, `archived/`) sẽ **không bao giờ bị ghi đè hoặc xóa bỏ** nếu đã tồn tại ở dự án client.
+
+# HƯỚNG DẪN SỬ DỤNG SLASH COMMANDS (QUY TRÌNH VIẾT TẮT)
+
+Để tăng tốc độ kích hoạt workflow, bạn có thể gõ trực tiếp các câu lệnh bắt đầu bằng dấu gạch chéo `/` trong khung chat. AI Agent sẽ tự động chuyển sang workflow tương ứng:
+
+| Lệnh | Workflow kích hoạt | Hành động của Agent |
+| :--- | :--- | :--- |
+| `/ba <mô-tả>` | Business Analysis | Tạo hoặc cập nhật `ba.md` và dừng tại Checkpoint 1 (BA Approval). |
+| `/feature <mô-tả>` | Feature Development | Kiểm tra `ba.md`, tạo `feature.md` và dừng tại Checkpoint 2 (Design Approval). |
+| `/bugfix <mô-tả>` | Bug Fix | Phân tích bug, lập kế hoạch sửa lỗi trong `fix-bug.md` và dừng tại Checkpoint 2. |
+| `/refactor <mô-tả>`| Safe Refactoring | Lập kế hoạch tái cấu trúc trong `refactor.md` và dừng tại Checkpoint 2. |
+| `/review` | Code Review | Tự động quét diff các file đã thay đổi và sinh đánh giá trong `review.md`. |
+| `/continue` | Resume Progress | Tự động đọc spec hiện tại và tiếp tục công việc đang dang dở. |
+| `/sync` / `/update` | Synchronize Rules | Hướng dẫn hoặc chạy script đồng bộ hóa rules từ upstream repository. |
+
+Chi tiết cấu hình các lệnh có thể xem tại thư mục [commands/](commands/).
 
 # PURPOSE OF EACH LAYER
 
@@ -139,6 +181,18 @@ Responsible for:
 - safe refactor planning
 - legacy cleanup strategy
 - regression validation
+
+---
+
+## commands/ (Đồng bộ thành .agents/skills/ tại Client)
+
+Custom Slash Commands registered to Antigravity IDE.
+
+Responsible for:
+
+- registering custom slash commands (e.g., `/ba`, `/feature`, `/bugfix`, `/refactor`, `/review`, `/continue`)
+- orchestrating specific workflows and template file generation
+- defining interactive checkpoint approvals with the user
 
 ---
 

@@ -1,0 +1,11 @@
+{
+  "skill_name": "debugging-patterns",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Hãy điều tra và sửa lỗi: Khi người dùng bấm F5 để reload trang, trạng thái store Zustand bị mất hoặc không đồng bộ với localStorage (hydration bị reset).",
+      "expected_output": "Giải pháp sửa lỗi tập trung vào root cause của quá trình hydration và persistence của Zustand, kèm kịch bản tái hiện lỗi.",
+      "files": []
+    }
+  ]
+}

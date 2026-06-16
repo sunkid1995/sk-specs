@@ -1,8 +1,7 @@
 ---
-
 name: architecture-rules
+description: Frontend architecture constraints — separation of concerns, modular Zustand stores, storage wrapper, and scalability.
 version: 1.0.0
-
 ---
 
 # FRONTEND ARCHITECTURE RULES
