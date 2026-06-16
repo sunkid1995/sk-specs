@@ -1,0 +1,11 @@
+{
+  "skill_name": "business-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Hãy thực hiện phân tích nghiệp vụ cho tính năng ghim tin nhắn (Pin Message) trong ứng dụng chat. Các yêu cầu nghiệp vụ gồm: cho phép ghim tin nhắn, cập nhật thời gian thực qua socket cluster, người tạo tin nhắn hoặc admin mới có quyền xóa tin nhắn ghim, kiểm tra quyền admin trước khi thực hiện.",
+      "expected_output": "Tài liệu phân tích BA chi tiết bằng tiếng Việt chứa đầy đủ 5 phần theo chuẩn, đặc biệt làm rõ các edge cases về kết nối mạng, quyền xóa tin nhắn ghim và kiểm tra quyền admin.",
+      "files": []
+    }
+  ]
+}

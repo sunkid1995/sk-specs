@@ -1,0 +1,11 @@
+{
+  "skill_name": "feature-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Feature: Xây dựng bộ lọc tìm kiếm nâng cao cho ứng dụng chat. Hãy phân tích tính năng và sinh tài liệu roadmap triển khai.",
+      "expected_output": "Tài liệu roadmap triển khai chi tiết lưu vào sk-specs/ nâng cao, chia làm các phase rõ ràng và liệt kê tối thiểu 5 rủi ro kỹ thuật hoặc 10 test cases.",
+      "files": []
+    }
+  ]
+}

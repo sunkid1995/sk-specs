@@ -1,5 +1,6 @@
 ---
 name: security-rules
+description: Frontend security constraints — secrets management, XSS prevention, client storage security, and HTTPS.
 version: 1.0.0
 ---
 

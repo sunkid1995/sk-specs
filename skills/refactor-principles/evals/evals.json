@@ -1,0 +1,11 @@
+{
+  "skill_name": "refactor-principles",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Hãy lập kế hoạch refactor cho component tin nhắn chat lớn (>100 dòng JSX) đang có hiệu năng kém do re-render liên tục.",
+      "expected_output": "Kế hoạch refactor chi tiết có baseline test, đề xuất tách nhỏ component, trích xuất hook và sử dụng selector Zustand, kèm validation log.",
+      "files": []
+    }
+  ]
+}

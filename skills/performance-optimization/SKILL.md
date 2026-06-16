@@ -1,5 +1,6 @@
 ---
 name: performance-optimization
+description: Frontend performance techniques — Zustand selectors, lazy loading, tree-shaking, and render optimization.
 version: 1.0.0
 ---
 

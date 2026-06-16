@@ -1,35 +1,66 @@
 ---
 name: fix-bug
+description: Bug fix workflow — reproduce bug, identify root cause, fix, and validate with 10+ test cases.
 version: 2.1.0
 ---
 
 # REQUIRED INPUT
 
-ba.md (Retrieve existing or create via reverse-engineering if legacy code)
-reproduction-test-case (Must write a test case to reproduce the bug before fixing)
-old-test-cases (Retrieve existing tests)
+```mermaid
+graph TD
+    Start([Bắt đầu Sửa lỗi]) --> Investigate[1. Định vị module lỗi & lập đường tái hiện]
+    Investigate --> WriteFailedTest[Viết unit test lỗi tái hiện lỗi tự động]
+    WriteFailedTest --> RCA_Whys[2. Thực hiện 5 Whys tìm nguyên nhân gốc rễ và ghi fix-bug.md]
+    RCA_Whys --> Checkpoint[3. Plan Approval Checkpoint]
+    Checkpoint --> WaitUser{User phê duyệt Kế hoạch Sửa lỗi?}
+    WaitUser -- Không/Chỉnh sửa --> UpdatePlan[Cập nhật kế hoạch/fix-bug.md] --> Checkpoint
+    WaitUser -- Có --> ApplyFix[4. Triển khai code sửa lỗi targeted minimal]
+    ApplyFix --> VerifyFix[Chạy test case tái hiện xem đã xanh chưa]
+    VerifyFix --> RunAllTests[Chạy test suite & 10+ validation tests]
+    RunAllTests --> End([Hoàn thành Sửa lỗi an toàn])
+```
 
-# OUTPUT
+- ba.md (Retrieve existing or create via reverse-engineering if legacy code)
+- old-test-cases
 
-Expected Behavior
+# WORKFLOW STEPS
 
-Actual Behavior
+## 1. Investigation & Reproduction
+- Search the code to locate the module described in the bug report.
+- Establish a reproduction path (inputs, environment, user role).
+- Write a unit test case that fails deterministically to reproduce the bug behavior.
+- Document expected vs actual behaviors.
 
-Root Cause
+## 2. Root Cause Analysis (RCA)
+- Apply the "5 Whys" method to trace state mutations or logic branches. Find out *why* the bad state occurred rather than patching symptoms.
+- Propose a targeted, minimal fix strategy.
+- Generate or update `fix-bug.md` under `sk-specs/active/<work-item-name>/` using `templates/fix-bug.md`.
 
-Fix Strategy
+## 3. Plan Approval Checkpoint (Blocking)
+- Present the planned fix, reproduction steps, and regression risks to the user.
+- Ask the user (Design Checkpoint): *"Bạn có muốn chỉnh sửa gì trong thiết kế kỹ thuật/kế hoạch sửa lỗi này không?"*
+- Stop and wait. Do NOT implement the code fix until the user explicitly approves.
 
-Regression Risks
-
-Validation Plan
-
-Reproduction Test Case Execution Log
-
-All Tests Verification Log
+## 4. Implementation & Regression Safety
+- Apply the approved code fix.
+- Run the reproduction test case to confirm it now passes (turns green).
+- Execute at least 10 validation test cases (including old tests + new edge cases) to guarantee 0 regression.
+- Record the execution logs inside `fix-bug.md`.
 
 # VALIDATION
 
-Minimum:
+- Minimum: 1 reproduction test case demonstrating the failure.
+- Minimum: 10 validation test cases passing successfully (including reproduction test case + old test cases).
 
-- 1 reproduction test case demonstrating the failure.
-- 10 validation test cases passing successfully (including reproduction test case + old test cases).
+# OUTPUT
+
+The generated `fix-bug.md` must contain these exact sections:
+
+- Expected Behavior
+- Actual Behavior
+- Root Cause
+- Fix Strategy
+- Regression Risks
+- Validation Plan
+- Reproduction Test Case Execution Log
+- All Tests Verification Log

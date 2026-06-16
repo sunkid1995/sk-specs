@@ -1,6 +1,6 @@
 ---
 name: regression-safety
-version: 1.0.0
+description: Enforce regression validation rules — verify UI parity, persisted state integrity, async behavior, and edge cases before merging changes.
 ---
 
 # REGRESSION SAFETY RULES

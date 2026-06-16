@@ -1,8 +1,7 @@
 ---
-
 name: output-format
+description: Output structure definitions for Feature Analysis, Architecture Design, and Task Breakdown.
 version: 1.0.0
-
 ---
 
 # FEATURE ANALYSIS OUTPUT

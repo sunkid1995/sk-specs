@@ -1,5 +1,6 @@
 ---
 name: spec-persistence
+description: Spec persistence behavior — file structure, workflow rules, test case requirements, and progress tracking.
 version: 3.0.0
 ---
 
@@ -13,7 +14,7 @@ For every:
 
 Automatically persist outputs into:
 
-.agents/sk-specs/<work-item-name>/
+sk-specs/<work-item-name>/
 
 # FILE STRUCTURE
 
@@ -118,4 +119,4 @@ Progress Updates (Mandatory):
 - The overall item status in `progress.md` must be set to `Completed` once all tasks are done.
 
 Target Directory:
-- Always use `.agents/sk-specs/active/<work-item-name>/` for active specs. Never use `.agent` (without 's').
+- Always use `sk-specs/active/<work-item-name>/` for active specs. Never use `.agent` (without 's').

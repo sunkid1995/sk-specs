@@ -1,0 +1,11 @@
+{
+  "skill_name": "code-review-principles",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Hãy review đoạn code thay đổi sau đây và xuất báo cáo code-review.md. Đảm bảo phân loại lỗi đúng mức độ nghiêm trọng và định dạng 4 phần bằng tiếng Việt.",
+      "expected_output": "Báo cáo code-review.md đúng định dạng 4 phần bằng tiếng Việt, sử dụng các emoji màu sắc 🔴, 🟡, 🔵, 🟢 để phân loại lỗi.",
+      "files": []
+    }
+  ]
+}
