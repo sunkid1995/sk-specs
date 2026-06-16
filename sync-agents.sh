@@ -26,7 +26,7 @@ else
     TARGET_AGENTS_DIR="$CLIENT_DIR_ABS/.agents"
 fi
 
-echo "Bắt đầu đồng bộ cấu hình Multi-Agent..."
+echo "Bắt đầu đồng bộ cấu hình quy trình phát triển phần mềm..."
 echo "Thư mục nguồn (sk-specs): $SCRIPT_DIR_ABS"
 echo "Thư mục đích (Client .agents/): $TARGET_AGENTS_DIR"
 
@@ -84,4 +84,4 @@ mkdir -p "$CLIENT_DIR_ABS/sk-specs/completed"
 mkdir -p "$CLIENT_DIR_ABS/sk-specs/archived"
 echo "- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại tại root của client workspace"
 
-echo "Đồng bộ cấu hình Multi-Agent hoàn tất thành công!"
+echo "Đồng bộ cấu hình quy trình phát triển phần mềm hoàn tất thành công!"
