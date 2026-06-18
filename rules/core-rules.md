@@ -1,7 +1,7 @@
 ---
 name: core-rules
 description: Core agent rules — role definition, engineering priorities, mandatory workflows, and feedback checkpoints.
-version: 2.2.0
+version: 2.3.0
 ---
 
 # ROLE
@@ -55,6 +55,22 @@ Retrieve/Create BA & old tests → BA Checkpoint → Plan Refactor (generate ref
 
 Bugfix Workflow:
 Retrieve/Create BA & old tests → BA Checkpoint → Plan Fix (generate fix-bug.md) → Design Checkpoint → Create reproduction test case → Fix Bug & Test → Progress Update → Code Review (generate review.md)
+
+# AGENT HOOKS RULES
+
+To enforce codebase consistency, quality gates, and prevent duplication, the AI Agent MUST automatically run lifecycle hook scripts if they are defined in `sk-specs/hooks/`.
+
+## 1. Lifecycle Events
+- **`pre-ba` / `post-ba`**: Executed before starting / after completing the Business Analysis phase.
+- **`pre-design` / `post-design`**: Executed before starting / after completing the Feature/Refactor/Bugfix design phase.
+- **`pre-code` / `post-code`**: Executed before starting to write code / after writing code (but before submitting for review).
+- **`pre-review` / `post-review`**: Executed before starting / after completing the Code Review phase.
+
+## 2. Mandatory Execution Workflow
+- Before executing a stage (BA, Design, Code, Review), the Agent MUST search for `sk-specs/hooks/pre-<stage>.[js|sh]`.
+- After completing a stage, the Agent MUST search for `sk-specs/hooks/post-<stage>.[js|sh]`.
+- If a matching script is found, the Agent MUST execute it using the shell/terminal.
+- If a hook script fails (returns a non-zero exit code), the Agent MUST halt execution immediately, report the failure log to the user, and ask for further instructions. Do NOT proceed to the next step or checkpoint.
 
 # SLASH COMMANDS INTEGRATION
 
