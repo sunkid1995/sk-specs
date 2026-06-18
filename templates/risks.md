@@ -1,3 +1,8 @@
+---
+type: ""          # feature | bugfix | refactor
+created: ""       # YYYY-MM-DD
+---
+
 # Nhật ký Rủi ro Kỹ thuật (Technical Risks Tracking)
 
 Tài liệu này theo dõi các rủi ro kỹ thuật tiềm ẩn, mức độ ảnh hưởng của chúng và các biện pháp giảm thiểu được áp dụng.

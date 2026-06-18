@@ -1,3 +1,10 @@
+---
+type: "" # feature | bugfix | refactor
+status: pending # pending | approved | rejected
+created: "" # YYYY-MM-DD
+reviewer: "" # Agent name or User
+---
+
 # Đánh giá Mã nguồn (Code Review)
 
 ## Đánh giá Nghiệp vụ (Business Validation)

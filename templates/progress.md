@@ -1,3 +1,10 @@
+---
+type: ""          # feature | bugfix | refactor
+status: not-started  # not-started | in-progress | under-review | completed
+created: ""       # YYYY-MM-DD
+agent: ""         # Agent name or ID
+---
+
 # Theo dõi Tiến độ Triển khai (Implementation Progress Tracking)
 
 Tài liệu này theo dõi tiến độ chi tiết của các đầu việc, giúp nhiều agent làm việc tuần tự có thể nắm bắt tiến trình mà không làm gián đoạn công việc của nhau.

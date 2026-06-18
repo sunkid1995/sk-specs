@@ -1,3 +1,10 @@
+---
+type: bugfix
+status: draft     # draft | approved | in-progress | completed
+created: ""       # YYYY-MM-DD
+agent: ""         # Agent name or ID
+---
+
 # Phân tích và Sửa lỗi (Bug Analysis & Fix Plan)
 
 ## Hành vi Mong muốn (Expected Behavior)

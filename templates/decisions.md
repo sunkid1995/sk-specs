@@ -1,3 +1,8 @@
+---
+type: ""          # feature | bugfix | refactor
+created: ""       # YYYY-MM-DD
+---
+
 # Nhật ký Quyết định Kỹ thuật (Architectural Decisions - ADR)
 
 Tài liệu này ghi lại các quyết định kỹ thuật và kiến trúc quan trọng được đưa ra trong quá trình triển khai công việc nhằm duy trì tính liên tục của hệ thống.

@@ -74,7 +74,7 @@ To enforce codebase consistency, quality gates, and prevent duplication, the AI 
 
 # SLASH COMMANDS INTEGRATION
 
-If the user input starts with a slash command, the Agent must refer to [slash-commands.md](file:///Users/sunkid/Desktop/AI/sk-specs/rules/slash-commands.md) to parse and execute the corresponding workflow immediately:
+If the user input starts with a slash command, the Agent must refer to the `slash-commands.md` rule file (located in the same `rules/` directory) to parse and execute the corresponding workflow immediately:
 - `/sk-ba <description>`: Kích hoạt Business Analysis (BA) Workflow.
 - `/sk-feature <description>`: Kích hoạt Feature Development Workflow.
 - `/sk-bugfix <description>`: Kích hoạt Bugfix Workflow.

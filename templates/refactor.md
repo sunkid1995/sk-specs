@@ -1,3 +1,10 @@
+---
+type: refactor
+status: draft     # draft | approved | in-progress | completed
+created: ""       # YYYY-MM-DD
+agent: ""         # Agent name or ID
+---
+
 # Kế hoạch Tái cấu trúc (Refactor Plan)
 
 ## Vấn đề Hiện tại (Current Problems)

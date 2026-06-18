@@ -112,12 +112,16 @@ function analyzeWorkspace() {
   utils.forEach(u => console.log(`  * [Util] ${u}`));
   console.log("------------------------------------\n");
 
-  // Kiểm tra trùng lặp tên
-  let duplicatesFound = false;
+  // Kiểm tra trùng lặp tên và vi phạm cấu trúc
+  let hasWarnings = false;
+  let hasErrors = false;
+
   console.log("--- KIỂM TRA TRÙNG LẶP & SUB-STANDARD ---");
+
+  // Kiểm tra trùng lặp tên (Warning — không chặn)
   for (const [name, occurrences] of Object.entries(allModules)) {
     if (occurrences.length > 1) {
-      duplicatesFound = true;
+      hasWarnings = true;
       console.warn(`[CẢNH BÁO TRÙNG LẶP] Phát hiện tên trùng lặp '${name}':`);
       occurrences.forEach(occ => {
         console.warn(`  - Kiểu: ${occ.type} tại đường dẫn: ${occ.path}`);
@@ -126,7 +130,7 @@ function analyzeWorkspace() {
     }
   }
 
-  // Kiểm tra vi phạm cấu trúc thư mục (Flat file rules)
+  // Kiểm tra vi phạm cấu trúc thư mục Folder-First (Error — chặn cứng)
   files.forEach(file => {
     const relativePath = path.relative(rootDir, file.path);
     if (
@@ -138,21 +142,27 @@ function analyzeWorkspace() {
       const parentDirIndex = parts.indexOf('components') !== -1 ? parts.indexOf('components') : parts.indexOf('hooks');
       if (parts.length - parentDirIndex === 2) {
         // Ví dụ: components/Button.tsx (vi phạm folder-first rule)
-        console.error(`[VI PHẠM QUY TẮC THƯ CỤC] File flat không được phép: ${relativePath}`);
+        hasErrors = true;
+        console.error(`[VI PHẠM QUY TẮC THƯ MỤC] File flat không được phép: ${relativePath}`);
         console.error(`-> BẮT BUỘC: Bạn phải tạo thư mục riêng cho module này (ví dụ: ${relativePath.replace('.tsx', '/index.tsx').replace('.ts', '/index.ts')})\n`);
-        duplicatesFound = true; // Block hoặc cảnh báo
       }
     }
   });
 
-  if (!duplicatesFound) {
+  // Tổng kết
+  if (!hasWarnings && !hasErrors) {
     console.log("✅ Không phát hiện trùng lặp hoặc vi phạm cấu trúc thư mục nghiêm trọng.");
-  } else {
-    console.log("⚠️  Phát hiện một số cảnh báo trùng lặp/vi phạm. Vui lòng rà soát kỹ trước khi viết code mới!");
+  } else if (hasWarnings && !hasErrors) {
+    console.log("⚠️  Phát hiện một số cảnh báo trùng lặp (không chặn). Vui lòng rà soát kỹ trước khi viết code mới!");
   }
-  
+
+  if (hasErrors) {
+    console.error("\n❌ HOOK THẤT BẠI: Phát hiện vi phạm cấu trúc thư mục (Folder-First rule).");
+    console.error("-> YÊU CẦU: Sửa tất cả vi phạm cấu trúc trên trước khi tiếp tục viết code.");
+  }
+
   console.log("\n=== [PRE-CODE HOOK] Hoàn thành kiểm tra ===\n");
-  process.exit(0); // Exit 0 để không chặn quá trình nếu chỉ là cảnh báo, hoặc exit 1 nếu muốn chặn vi phạm nghiêm trọng
+  process.exit(hasErrors ? 1 : 0);
 }
 
 analyzeWorkspace();
