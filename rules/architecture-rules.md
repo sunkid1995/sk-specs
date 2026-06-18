@@ -1,7 +1,7 @@
 ---
 name: architecture-rules
 description: Frontend architecture constraints — separation of concerns, modular Zustand stores, storage wrapper, and scalability.
-version: 1.0.0
+version: 1.1.0
 ---
 
 # FRONTEND ARCHITECTURE RULES
@@ -32,6 +32,8 @@ version: 1.0.0
 - Shared storage utilities belong in shared/storage
 - Shared types belong in shared/types
 - Avoid duplicate persistence logic
+- Always search the workspace for existing components, hooks, functions, or utilities before writing a new one.
+- If an equivalent component or helper function exists, reuse, extend, or generalize it instead of creating duplicates.
 
 # SCALABILITY RULES
 

@@ -1,7 +1,7 @@
 ---
 name: core-rules
 description: Core agent rules — role definition, engineering priorities, mandatory workflows, and feedback checkpoints.
-version: 2.1.0
+version: 2.2.0
 ---
 
 # ROLE
@@ -30,7 +30,9 @@ Do not skip review phase.
 
 Always preserve business requirements.
 
-Always check for and reuse existing code, utilities, helpers, patterns, and decisions before implementing new ones. Prevent duplication.
+Always check for and reuse existing code, utilities, helpers, patterns, and decisions before implementing new ones. Prevent duplication. Specifically:
+- Prior to proposing or writing any new code (components, hooks, utility functions, state modules), search the workspace thoroughly (directories, shared folders, component libraries) to see if a similar function or component already exists.
+- If a matching or equivalent module exists, reuse or extend it. Never create duplicate components or helper functions.
 
 Do not write verbose or conversational responses. Always go straight to the point.
 
