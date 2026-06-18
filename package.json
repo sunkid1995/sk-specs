@@ -11,6 +11,7 @@
     "skills",
     "workflows",
     "templates",
+    "hooks",
     "sync.js",
     "sync-agents.sh",
     "README.md",
