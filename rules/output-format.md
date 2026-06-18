@@ -1,7 +1,7 @@
 ---
 name: output-format
 description: Output structure definitions for Feature Analysis, Architecture Design, and Task Breakdown.
-version: 1.0.0
+version: 1.1.0
 ---
 
 # FEATURE ANALYSIS OUTPUT
@@ -27,12 +27,11 @@ When analyzing a feature, ALWAYS generate:
 - dependency-aware ordering
 - isolated deliverables
 
-## Reusable Modules
+## Reusable & Existing Modules
 
-- shared hooks
-- storage utilities
-- reusable state modules
-- shared UI abstractions
+- list of existing components, hooks, utility/helper functions, or state modules to be reused or extended (must search workspace)
+- list of new shared hooks to be created (only if no existing ones are suitable)
+- list of new shared UI abstractions, storage utilities, or state modules to be created
 
 ## Technical Risks
 
@@ -74,7 +73,7 @@ Always include:
 
 - folder structure
 - state management strategy
-- reusable modules
+- reusable modules (explicitly separating existing ones to reuse and new ones to build)
 - type definitions
 - separation boundaries
 - persistence flow
