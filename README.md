@@ -74,18 +74,9 @@ Dự án tập trung vào việc chuẩn hóa và duy trì ngữ cảnh phát tr
     │   ├── ba.md
     │   ├── feature.md
     │   ├── progress.md
-    │   ├── ...
-    │   └── hooks/ (Các script Hook mẫu dùng để khởi tạo)
-    │       ├── pre-ba.js
-    │       ├── post-ba.js
-    │       ├── pre-design.js
-    │       ├── post-design.js
-    │       ├── pre-code.js
-    │       ├── post-code.js
-    │       ├── pre-review.js
-    │       └── post-review.js
+    │   └── ...
     │
-    ├── hooks/ (Đồng bộ các file script thực thi từ templates/hooks/)
+    ├── hooks/ (Đồng bộ các file script thực thi từ thư mục hooks/ của repo)
     │   ├── pre-ba.js
     │   ├── pre-code.js
     │   └── ...
@@ -96,10 +87,10 @@ Dự án tập trung vào việc chuẩn hóa và duy trì ngữ cảnh phát tr
 ```
 
 > [!NOTE]
-> Trong repository này (`sk-specs`), các thư mục `commands/`, `rules/`, `skills/`, `workflows/`, `templates/` và `templates/hooks/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
+> Trong repository này (`sk-specs`), các thư mục `commands/`, `rules/`, `skills/`, `workflows/`, `templates/` và `hooks/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
 > Khi tích hợp vào dự án Client (Workspace):
 > - Thư mục `commands/` ở gốc repository sẽ được sao chép và đồng bộ trực tiếp ra thư mục `.agents/skills/` của dự án client để IDE nhận diện thành các phím tắt lệnh gõ nhanh bắt đầu bằng dấu `/` (ví dụ: `/sk-ba`, `/sk-feature`,...).
-> - Toàn bộ repository (bao gồm `rules/`, `skills/`, `workflows/`, `templates/` và `templates/hooks/` -> `sk-specs/hooks/`) sẽ được copy gọn gàng vào bên trong `sk-specs/` của Client, giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè lên các rule/skill riêng của dự án client).
+> - Toàn bộ repository (bao gồm `rules/`, `skills/`, `workflows/`, `templates/` và `hooks/` -> `sk-specs/hooks/`) sẽ được copy gọn gàng vào bên trong `sk-specs/` của Client, giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè lên các rule/skill riêng của dự án client).
 
 
 # HƯỚNG DẪN CÀI ĐẶT & ĐỒNG BỘ (INSTALLATION & SYNC)

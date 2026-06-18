@@ -111,18 +111,18 @@ if (!fs.existsSync(clientHooksDir)) {
     fs.mkdirSync(clientHooksDir, { recursive: true });
 }
 
-// Sao chép các tệp script mẫu từ templates/hooks sang sk-specs/hooks nếu chưa có
-const srcHooksTemplatesDir = path.join(srcDir, 'templates', 'hooks');
-if (fs.existsSync(srcHooksTemplatesDir)) {
-    const hookTemplates = fs.readdirSync(srcHooksTemplatesDir);
-    for (let hookTemplate of hookTemplates) {
-        const srcTemplatePath = path.join(srcHooksTemplatesDir, hookTemplate);
-        const targetHookPath = path.join(clientHooksDir, hookTemplate);
+// Sao chép các tệp script mẫu từ hooks sang sk-specs/hooks nếu chưa có
+const srcHooksDir = path.join(srcDir, 'hooks');
+if (fs.existsSync(srcHooksDir)) {
+    const hookFiles = fs.readdirSync(srcHooksDir);
+    for (let hookFile of hookFiles) {
+        const srcHookPath = path.join(srcHooksDir, hookFile);
+        const targetHookPath = path.join(clientHooksDir, hookFile);
         
         // Không ghi đè nếu tệp hook đích đã tồn tại để bảo vệ tùy chỉnh của user
         if (!fs.existsSync(targetHookPath)) {
-            fs.copyFileSync(srcTemplatePath, targetHookPath);
-            console.log(`  * Khởi tạo hook mẫu: sk-specs/hooks/${hookTemplate}`);
+            fs.copyFileSync(srcHookPath, targetHookPath);
+            console.log(`  * Khởi tạo hook mẫu: sk-specs/hooks/${hookFile}`);
         }
     }
 }

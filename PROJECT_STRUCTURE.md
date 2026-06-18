@@ -137,3 +137,25 @@ Chứa các Custom Slash Commands tương thích với cơ chế nhận diện c
     *   **Nhiệm vụ:** Custom Slash Command `/sk-review`. Kích hoạt Code Review và sinh `review.md`.
 *   [continue/SKILL.md](commands/sk-continue/SKILL.md)
     *   **Nhiệm vụ:** Custom Slash Command `/sk-continue`. Tiếp tục tiến trình công việc dang dở.
+
+---
+
+## 6. Thư mục hooks/
+Chứa các tệp script Hook thực thi tự động (Node.js) chạy tại các mốc vòng đời của quá trình phát triển (SDLC) tại Client Workspace. Mỗi file đại diện cho một Quality Gate kiểm soát chất lượng:
+
+*   [pre-ba.js](hooks/pre-ba.js)
+    *   **Nhiệm vụ:** Kiểm tra trước khi lập BA. Cảnh báo các luồng tính năng song song để tránh chồng chéo nghiệp vụ.
+*   [pre-design.js](hooks/pre-design.js)
+    *   **Nhiệm vụ:** Kiểm tra trước khi thiết kế kỹ thuật. Đảm bảo file `ba.md` đã tồn tại và không còn chứa placeholder chưa hoàn thành.
+*   [pre-code.js](hooks/pre-code.js)
+    *   **Nhiệm vụ:** Kiểm tra trước khi code. Quét workspace để cảnh báo các component, hook hoặc utility trùng tên hoặc sai cấu trúc file.
+*   [post-code.js](hooks/post-code.js)
+    *   **Nhiệm vụ:** Kiểm tra sau khi hoàn thành code. Tự động chạy bộ test suite (Vitest) và linter (`eslint`) để đảm bảo không phát sinh lỗi.
+*   [pre-review.js](hooks/pre-review.js)
+    *   **Nhiệm vụ:** Kiểm tra trước khi tạo review. Đảm bảo checklist tiến độ trong `progress.md` hoàn thành và có thay đổi mã nguồn thực tế trong Git.
+
+---
+
+## 7. Thư mục templates/
+Chứa các biểu mẫu đặc tả tiêu chuẩn (như `ba.md`, `feature.md`, `progress.md`,...) dùng để khởi tạo tài liệu đặc tả khi Agent chuyển đổi giữa các giai đoạn trong quy trình phát triển.
+

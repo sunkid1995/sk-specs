@@ -84,4 +84,31 @@ mkdir -p "$CLIENT_DIR_ABS/sk-specs/completed"
 mkdir -p "$CLIENT_DIR_ABS/sk-specs/archived"
 echo "- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại tại root của client workspace"
 
+# Khởi tạo thư mục sk-specs/hooks/ nếu chưa tồn tại tại client workspace
+CLIENT_HOOKS_DIR="$CLIENT_DIR_ABS/sk-specs/hooks"
+if [ ! -d "$CLIENT_HOOKS_DIR" ]; then
+    echo "- Thư mục sk-specs/hooks/ chưa tồn tại. Tiến hành khởi tạo..."
+    mkdir -p "$CLIENT_HOOKS_DIR"
+fi
+
+# Sao chép các tệp script mẫu từ hooks sang sk-specs/hooks nếu chưa có
+if [ -d "$SCRIPT_DIR_ABS/hooks" ]; then
+    for hook_file in "$SCRIPT_DIR_ABS"/hooks/*; do
+        if [ -f "$hook_file" ]; then
+            filename=$(basename "$hook_file")
+            target_hook_path="$CLIENT_HOOKS_DIR/$filename"
+            
+            # Không ghi đè nếu tệp hook đích đã tồn tại để bảo vệ tùy chỉnh của user
+            if [ ! -f "$target_hook_path" ]; then
+                cp "$hook_file" "$target_hook_path"
+                echo "  * Khởi tạo hook mẫu: sk-specs/hooks/$filename"
+            fi
+            
+            # Cấp quyền thực thi cho các file script
+            chmod 755 "$target_hook_path" 2>/dev/null
+        fi
+    done
+fi
+
 echo "Đồng bộ cấu hình quy trình phát triển phần mềm hoàn tất thành công!"
+
