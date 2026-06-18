@@ -74,17 +74,32 @@ Dự án tập trung vào việc chuẩn hóa và duy trì ngữ cảnh phát tr
     │   ├── ba.md
     │   ├── feature.md
     │   ├── progress.md
+    │   ├── ...
+    │   └── hooks/ (Các script Hook mẫu dùng để khởi tạo)
+    │       ├── pre-ba.js
+    │       ├── post-ba.js
+    │       ├── pre-design.js
+    │       ├── post-design.js
+    │       ├── pre-code.js
+    │       ├── post-code.js
+    │       ├── pre-review.js
+    │       └── post-review.js
+    │
+    ├── hooks/ (Đồng bộ các file script thực thi từ templates/hooks/)
+    │   ├── pre-ba.js
+    │   ├── pre-code.js
     │   └── ...
+    │
     ├── active/
     ├── completed/
     └── archived/
 ```
 
 > [!NOTE]
-> Trong repository này (`sk-specs`), các thư mục `commands/`, `rules/`, `skills/`, `workflows/` và `templates/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
+> Trong repository này (`sk-specs`), các thư mục `commands/`, `rules/`, `skills/`, `workflows/`, `templates/` và `templates/hooks/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
 > Khi tích hợp vào dự án Client (Workspace):
 > - Thư mục `commands/` ở gốc repository sẽ được sao chép và đồng bộ trực tiếp ra thư mục `.agents/skills/` của dự án client để IDE nhận diện thành các phím tắt lệnh gõ nhanh bắt đầu bằng dấu `/` (ví dụ: `/sk-ba`, `/sk-feature`,...).
-> - Toàn bộ repository (bao gồm `rules/`, `skills/`, `workflows/`, `templates/`) sẽ được copy gọn gàng vào bên trong `sk-specs/` của Client (ví dụ: `sk-specs/rules/`, `sk-specs/skills/`, v.v.), giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè lên các rule/skill riêng của dự án client).
+> - Toàn bộ repository (bao gồm `rules/`, `skills/`, `workflows/`, `templates/` và `templates/hooks/` -> `sk-specs/hooks/`) sẽ được copy gọn gàng vào bên trong `sk-specs/` của Client, giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè lên các rule/skill riêng của dự án client).
 
 
 # HƯỚNG DẪN CÀI ĐẶT & ĐỒNG BỘ (INSTALLATION & SYNC)
@@ -204,6 +219,17 @@ Responsible for:
 - registering custom slash commands (e.g., `/sk-ba`, `/sk-feature`, `/sk-bugfix`, `/sk-refactor`, `/sk-review`, `/sk-continue`)
 - orchestrating specific workflows and template file generation
 - defining interactive checkpoint approvals with the user
+
+---
+
+## hooks/
+
+Các tệp tin script thực thi tự động (Node.js/Shell) chạy tại các mốc vòng đời của quá trình phát triển (SDLC).
+
+Chịu trách nhiệm về:
+- Kiểm tra các lỗi nghiệp vụ, lỗi kỹ thuật hoặc sự trùng lặp trước khi chuyển bước.
+- Ngăn chặn sai lệch quy trình (ví dụ: cấm code khi chưa có BA, cấm review khi chưa hoàn thành code hoặc chưa chạy test).
+- Tự động hóa lặp đi lặp lại các tác vụ kiểm thử hoặc phân tích không gian làm việc.
 
 ---
 
@@ -406,6 +432,25 @@ The agent will automatically:
 - continue existing workflow
 - preserve architectural decisions
 - maintain execution continuity
+
+# AGENT HOOKS SYSTEM
+
+Hệ thống Agent Hooks cung cấp cơ chế tự động thực thi các kịch bản kiểm tra trước và sau mỗi giai đoạn phát triển chính. Điều này giúp thiết lập các cổng chất lượng (Quality Gates) nghiêm ngặt, ngăn chặn phát sinh code trùng lặp và bảo vệ tính toàn vẹn của mã nguồn.
+
+## 1. Cơ chế Hoạt động
+- **Kích hoạt tự động**: Khi Agent chạy một slash command tương ứng với workflow, Agent sẽ tự động tìm và chạy hook tương ứng:
+  - Trước khi bắt đầu giai đoạn: Chạy `sk-specs/hooks/pre-<giai-đoạn>.[js|sh]`
+  - Sau khi hoàn thành giai đoạn: Chạy `sk-specs/hooks/post-<giai-đoạn>.[js|sh]`
+- **Ràng buộc kết quả**: Nếu bất kỳ script nào trả về mã thoát khác 0 (exit code != 0), AI Agent sẽ **dừng lại ngay lập tức**, báo cáo chi tiết lỗi cho người dùng và yêu cầu xử lý trước khi tiếp tục.
+
+## 2. Các Hooks Mặc định Cung cấp
+- **`pre-ba.js`**: Quét thư mục `sk-specs/active/` để liệt kê các tính năng song song đang phát triển, đưa ra cảnh báo để tránh chồng chéo nghiệp vụ.
+- **`pre-design.js`**: Kiểm tra sự tồn tại của tệp `ba.md`. Ngăn chặn bắt đầu thiết kế kỹ thuật nếu chưa hoàn thành phân tích nghiệp vụ hoặc còn chứa placeholder chưa điền (`TODO`, `TBD`).
+- **`pre-code.js`**: Quét workspace để phát hiện và cảnh báo các component, hooks, utility trùng tên hoặc cấu trúc file không đúng chuẩn (Flat files).
+- **`post-code.js`**: Chạy unit tests (Vitest) và linter (`lint`), bắt buộc sửa hết lỗi trước khi chuyển sang review.
+- **`pre-review.js`**: Xác thực độ hoàn thiện của checklist trong `progress.md` và đảm bảo có file thay đổi thực tế trong Git trước khi tiến hành review.
+
+---
 
 # RECOMMENDED FUTURE FILES
 

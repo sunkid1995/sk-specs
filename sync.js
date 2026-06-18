@@ -104,11 +104,42 @@ for (let folder of progressFolders) {
 }
 console.log("- Đã đảm bảo các thư mục active/, completed/, archived/ tồn tại tại root của client workspace");
 
+// Khởi tạo thư mục sk-specs/hooks/ nếu chưa tồn tại tại client workspace
+const clientHooksDir = path.join(clientSkSpecsDir, 'hooks');
+if (!fs.existsSync(clientHooksDir)) {
+    console.log("- Thư mục sk-specs/hooks/ chưa tồn tại. Tiến hành khởi tạo...");
+    fs.mkdirSync(clientHooksDir, { recursive: true });
+}
+
+// Sao chép các tệp script mẫu từ templates/hooks sang sk-specs/hooks nếu chưa có
+const srcHooksTemplatesDir = path.join(srcDir, 'templates', 'hooks');
+if (fs.existsSync(srcHooksTemplatesDir)) {
+    const hookTemplates = fs.readdirSync(srcHooksTemplatesDir);
+    for (let hookTemplate of hookTemplates) {
+        const srcTemplatePath = path.join(srcHooksTemplatesDir, hookTemplate);
+        const targetHookPath = path.join(clientHooksDir, hookTemplate);
+        
+        // Không ghi đè nếu tệp hook đích đã tồn tại để bảo vệ tùy chỉnh của user
+        if (!fs.existsSync(targetHookPath)) {
+            fs.copyFileSync(srcTemplatePath, targetHookPath);
+            console.log(`  * Khởi tạo hook mẫu: sk-specs/hooks/${hookTemplate}`);
+        }
+    }
+}
+
 // Cấp quyền thực thi cho các script nếu chạy trên macOS/Linux
 if (process.platform !== 'win32') {
     try {
         fs.chmodSync(path.join(targetSkSpecsDir, 'sync-agents.sh'), '755');
         fs.chmodSync(path.join(targetSkSpecsDir, 'sync.js'), '755');
+        
+        // Cấp quyền thực thi cho các file trong sk-specs/hooks/
+        if (fs.existsSync(clientHooksDir)) {
+            const hookFiles = fs.readdirSync(clientHooksDir);
+            for (let file of hookFiles) {
+                fs.chmodSync(path.join(clientHooksDir, file), '755');
+            }
+        }
     } catch (e) {
         // Bỏ qua lỗi phân quyền nếu không đủ quyền
     }
