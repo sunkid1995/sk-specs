@@ -58,8 +58,15 @@ When the user enters a prompt starting with a slash (`/`), the Agent MUST immedi
 - **Action**:
   - Guide the user or run the sync utility (`sync.js` / `sync-agents.sh`) to synchronize configs from the core repository.
 
+### 8. `/sk-status`
+- **Goal**: Display a dashboard of all active work items.
+- **Action**:
+  - Scan `sk-specs/active/` and `sk-specs/completed/` directories.
+  - Summarize each work item: type, current phase, progress percentage, last update time.
+  - Output a markdown table. Do NOT create or modify any files.
+
 ## EXECUTION RULES
 
 1. **Prefix Matching**: If the prompt starts with a slash `/`, parse the command immediately.
 2. **Workflow Priority**: The workflow corresponding to the slash command takes priority over any default agent behavior.
-3. **No Placeholders**: Maintain high-quality specification outputs as defined in [output-format.md](file:///Users/sunkid/Desktop/AI/sk-specs/rules/output-format.md).
+3. **No Placeholders**: Maintain high-quality specification outputs as defined in `output-format.md` (located in the same `rules/` directory).

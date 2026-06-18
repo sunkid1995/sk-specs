@@ -1,3 +1,10 @@
+---
+type: ""          # feature | bugfix | refactor
+status: draft     # draft | approved | in-progress | completed
+created: ""       # YYYY-MM-DD
+agent: ""         # Agent name or ID
+---
+
 # Phân tích Nghiệp vụ (Business Analysis)
 
 ## Mục tiêu Kinh doanh (Business Goal)

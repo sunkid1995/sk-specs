@@ -1,3 +1,10 @@
+---
+type: feature
+status: draft     # draft | approved | in-progress | completed
+created: ""       # YYYY-MM-DD
+agent: ""         # Agent name or ID
+---
+
 # Đặc tả Tính năng (Feature Analysis & Design)
 
 ## Tóm tắt Tính năng (Feature Summary)

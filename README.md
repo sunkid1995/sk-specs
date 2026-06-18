@@ -1,507 +1,307 @@
 # Software Development Workflow with AI Agents
 
-**`sk-specs`** là bộ cấu trúc khung tiêu chuẩn cung cấp các quy tắc kỹ thuật (`rules`), kỹ năng chuyên môn (`skills`), quy trình thực thi (`workflows`) và biểu mẫu (`templates`) chuẩn nhằm tối ưu hóa toàn bộ **quy trình phát triển phần mềm (Software Development Lifecycle - SDLC) – từ khâu phân tích nghiệp vụ, thiết lập kiến trúc, phát triển tính năng, sửa lỗi cho đến khi ship tính năng**.
+**`sk-specs`** là bộ khung cấu trúc tiêu chuẩn (Standard SDLC Framework) giúp định hình quy tắc (`rules`), kỹ năng (`skills`), quy trình thực thi (`workflows`) và biểu mẫu (`templates`) nhằm tối ưu hóa toàn bộ **vòng đời phát triển phần mềm (Software Development Lifecycle - SDLC)** của AI Agent (Gemini, Claude, Cursor) trên Client Workspace.
 
-Dự án tập trung vào việc chuẩn hóa và duy trì ngữ cảnh phát triển cho AI Agent (như Gemini, Claude, Cursor) thông qua cơ chế lưu trữ đặc tả (`spec-persistence`). Nhờ cơ chế chia sẻ và kế thừa ngữ cảnh nhất quán này, hệ thống sẵn sàng hỗ trợ **cộng tác Multi-Agent (Đa Agent)**: cho phép các Agent khác nhau (ví dụ: Agent lập kế hoạch BA, Agent viết Code, Agent thực hiện Code Review) làm việc nối tiếp hoặc song song trên cùng một dự án mà không bị đứt gãy thông tin hay mất tiến độ thực tế.
+Dự án hỗ trợ cộng tác **Multi-Agent (Đa Agent)** thông qua cơ chế lưu trữ đặc tả liên tục (`spec-persistence`), giúp chia sẻ và kế thừa ngữ cảnh giữa các pha làm việc mà không làm mất tiến độ hay đứt gãy thông tin.
 
 ---
 
+## Cấu Trúc Thư Mục Sau Khi Đồng Bộ (Workspace Directory Structure)
+
+Dưới đây là sơ đồ cây thư mục sau khi đã đồng bộ hóa `sk-specs` vào dự án Client của bạn:
+
 ```txt
-.agents/
-├── skills/ (Các Slash Commands được đồng bộ từ thư mục `commands/`)
-│   ├── sk-ba/
-│   │   └── SKILL.md
-│   ├── sk-bugfix/
-│   │   └── SKILL.md
-│   ├── sk-continue/
-│   │   └── SKILL.md
-│   ├── sk-feature/
-│   │   └── SKILL.md
-│   ├── sk-refactor/
-│   │   └── SKILL.md
-│   └── sk-review/
-│       └── SKILL.md
+<client-project>/
 │
-└── sk-specs/
-    ├── rules/
-    │   ├── architecture-rules.md
-    │   ├── core-rules.md
-    │   ├── folder-structure-and-export-rules.md
-    │   ├── import-rule.md
-    │   ├── output-format.md
-    │   ├── security-rules.md
-    │   ├── spec-loading.md
-    │   ├── spec-persistence.md
-    │   └── testing-rules.md
-    │
-    ├── skills/
-    │   ├── business-analysis/
-    │   │   └── SKILL.md
-    │   ├── code-review-principles/
-    │   │   └── SKILL.md
-    │   ├── debugging-patterns/
-    │   │   └── SKILL.md
-    │   ├── feature-analysis/
-    │   │   └── SKILL.md
-    │   ├── frontend-stack/
-    │   │   └── SKILL.md
-    │   ├── performance-optimization/
-    │   │   └── SKILL.md
-    │   ├── react-zustand-patterns/
-    │   │   └── SKILL.md
-    │   ├── refactor-principles/
-    │   │   └── SKILL.md
-    │   ├── regression-safety/
-    │   │   └── SKILL.md
-    │   ├── reviewing-code/
-    │   │   └── SKILL.md
-    │   └── vietnamese-assistant/
-    │       └── SKILL.md
-    │
-    ├── workflows/
-    │   ├── business-analysis.md
-    │   ├── code-review.md
-    │   ├── feature-analysis.md
-    │   ├── feature-architecture.md
-    │   ├── feature-task-breakdown.md
-    │   ├── fix-bug.md
-    │   ├── legacy-cleanup.md
-    │   ├── root-cause-analysis.md
-    │   ├── safe-refactor.md
-    │   └── testing-workflow.md
-    │
-    ├── templates/
-    │   ├── ba.md
-    │   ├── feature.md
-    │   ├── progress.md
-    │   └── ...
-    │
-    ├── hooks/ (Đồng bộ các file script thực thi từ thư mục hooks/ của repo)
+├── .agents/                          # Cấu hình Agent (được quét tự động bởi IDE)
+│   ├── skills/                       # Slash Commands (đồng bộ từ commands/)
+│   │   ├── sk-ba/
+│   │   │   └── SKILL.md
+│   │   ├── sk-bugfix/
+│   │   │   └── SKILL.md
+│   │   ├── sk-continue/
+│   │   │   └── SKILL.md
+│   │   ├── sk-feature/
+│   │   │   └── SKILL.md
+│   │   ├── sk-refactor/
+│   │   │   └── SKILL.md
+│   │   ├── sk-review/
+│   │   │   └── SKILL.md
+│   │   └── sk-status/
+│   │       └── SKILL.md
+│   │
+│   └── sk-specs/                     # Bản sao cấu hình gốc (rules, skills, workflows, templates)
+│       ├── rules/
+│       │   ├── architecture-rules.md
+│       │   ├── core-rules.md
+│       │   ├── folder-structure-and-export-rules.md
+│       │   ├── import-rule.md
+│       │   ├── output-format.md
+│       │   ├── security-rules.md
+│       │   ├── slash-commands.md
+│       │   ├── spec-loading.md
+│       │   ├── spec-persistence.md
+│       │   └── testing-rules.md
+│       │
+│       ├── skills/
+│       │   ├── business-analysis/
+│       │   │   └── SKILL.md
+│       │   ├── code-review-principles/
+│       │   │   └── SKILL.md
+│       │   ├── debugging-patterns/
+│       │   │   └── SKILL.md
+│       │   ├── feature-analysis/
+│       │   │   └── SKILL.md
+│       │   ├── frontend-stack/
+│       │   │   └── SKILL.md
+│       │   ├── performance-optimization/
+│       │   │   └── SKILL.md
+│       │   ├── react-zustand-patterns/
+│       │   │   └── SKILL.md
+│       │   ├── refactor-principles/
+│       │   │   └── SKILL.md
+│       │   ├── regression-safety/
+│       │   │   └── SKILL.md
+│       │   ├── reviewing-code/
+│       │   │   └── SKILL.md
+│       │   ├── systematic-debugging/
+│       │   │   └── SKILL.md
+│       │   └── vietnamese-assistant/
+│       │       └── SKILL.md
+│       │
+│       ├── workflows/
+│       │   ├── business-analysis.md
+│       │   ├── code-review.md
+│       │   ├── feature-analysis.md
+│       │   ├── feature-architecture.md
+│       │   ├── feature-task-breakdown.md
+│       │   ├── fix-bug.md
+│       │   ├── legacy-cleanup.md
+│       │   ├── root-cause-analysis.md
+│       │   ├── safe-refactor.md
+│       │   └── testing-workflow.md
+│       │
+│       └── templates/
+│           ├── ba.md
+│           ├── decisions.md
+│           ├── feature.md
+│           ├── fix-bug.md
+│           ├── progress.md
+│           ├── refactor.md
+│           ├── review.md
+│           └── risks.md
+│
+└── sk-specs/                         # Dữ liệu tiến độ thực tế (tại root client workspace)
+    ├── hooks/                        # Quality Gates scripts (đồng bộ từ hooks/ của repo)
     │   ├── pre-ba.js
+    │   ├── post-ba.js
+    │   ├── pre-design.js
+    │   ├── post-design.js
     │   ├── pre-code.js
-    │   └── ...
+    │   ├── post-code.js
+    │   ├── pre-review.js
+    │   └── post-review.js
     │
-    ├── active/
-    ├── completed/
-    └── archived/
+    ├── active/                       # Các task đang được thực hiện
+    ├── completed/                    # Các task đã hoàn thành
+    └── archived/                     # Các tài liệu đã lưu trữ lịch sử
 ```
 
 > [!NOTE]
 > Trong repository này (`sk-specs`), các thư mục `commands/`, `rules/`, `skills/`, `workflows/`, `templates/` và `hooks/` được đặt trực tiếp ở thư mục gốc để quản lý và phát triển độc lập.
 > Khi tích hợp vào dự án Client (Workspace):
+>
 > - Thư mục `commands/` ở gốc repository sẽ được sao chép và đồng bộ trực tiếp ra thư mục `.agents/skills/` của dự án client để IDE nhận diện thành các phím tắt lệnh gõ nhanh bắt đầu bằng dấu `/` (ví dụ: `/sk-ba`, `/sk-feature`,...).
 > - Toàn bộ repository (bao gồm `rules/`, `skills/`, `workflows/`, `templates/` và `hooks/` -> `sk-specs/hooks/`) sẽ được copy gọn gàng vào bên trong `sk-specs/` của Client, giúp cô lập hoàn toàn và tránh làm ô nhiễm thư mục `.agents/` gốc của client (đảm bảo không ghi đè lên các rule/skill riêng của dự án client).
 
+---
 
-# HƯỚNG DẪN CÀI ĐẶT & ĐỒNG BỘ (INSTALLATION & SYNC)
+## 1. Cấu Trúc Hệ Thống (Architecture Layer)
 
-Để tích hợp cấu trúc quy trình phát triển này vào dự án client (Workspace), bạn có thể sử dụng một trong hai phương thức sau:
+Để hiểu chi tiết nhiệm vụ từng file trong hệ thống, vui lòng tham khảo [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md). Dưới đây là tóm tắt các lớp chính:
 
-### Cách 1: Sử dụng `npx` (Khuyên dùng khi lấy trực tiếp từ GitHub)
+| Thư mục      | Vai trò chính                                                                                    | Chi tiết tài liệu                |
+| :----------- | :----------------------------------------------------------------------------------------------- | :------------------------------- |
+| `rules/`     | Quy định, ràng buộc kỹ thuật bắt buộc của dự án (kiến trúc, đặt tên, import, kiểm thử).          | [Tài liệu Rules](rules/)         |
+| `skills/`    | Kho tri thức và kinh nghiệm thực tiễn (Frontend stack, tối ưu hiệu năng, state-management).      | [Tài liệu Skills](skills/)       |
+| `workflows/` | Quy trình thực thi từng bước (Phân tích, Thiết kế, Code, Test, Sửa lỗi, Tái cấu trúc).           | [Tài liệu Workflows](workflows/) |
+| `commands/`  | Các Slash Commands đăng ký vào IDE giúp kích hoạt nhanh các luồng công việc.                     | [Tài liệu Commands](commands/)   |
+| `hooks/`     | Các Quality Gates tự động kiểm soát chất lượng code trước và sau các pha.                        | [Tài liệu Hooks](hooks/)         |
+| `templates/` | Mẫu tài liệu đặc tả chuẩn (`ba.md`, `feature.md`, `progress.md`...).                             | [Tài liệu Templates](templates/) |
+| `sk-specs/`  | Nơi lưu trữ trạng thái đặc tả thực tế tại client project (`active/`, `completed/`, `archived/`). | [Tài liệu Specs](sk-specs/)      |
 
-Do hạn chế của npm trong việc tự động suy đoán tên lệnh từ Git URL, bạn cần chỉ định rõ gói cài đặt thông qua `-p` và tên lệnh thực thi ở cuối.
+---
 
-Mở terminal tại thư mục gốc của dự án client và chạy lệnh:
+## 2. Quy Trình Cài Đặt & Đồng Bộ (Installation & Sync)
+
+Tích hợp bộ khung quy chuẩn này vào dự án Client thông qua 2 phương thức:
+
+### Cách 1: Sử dụng `npx` (Khuyên dùng)
+
+Chạy trực tiếp từ thư mục gốc của dự án Client:
 
 ```bash
 npx -p github:sunkid1995/sk-specs sk-specs
 ```
 
-Lệnh này sẽ tự động tải các quy chuẩn mới nhất, khởi tạo thư mục `.agents/` nếu chưa có và đồng bộ toàn bộ rules, skills, workflows, templates vào dự án của bạn.
+### Cách 2: Sử dụng Script cục bộ
 
-### Cách 2: Sử dụng Script Bash cục bộ
-
-Nếu bạn đã sao chép repository này về máy, hãy chạy script từ thư mục của repository này:
+Chạy từ thư mục của repository này:
 
 ```bash
 ./sync-agents.sh <đường-dẫn-đến-dự-án-client>
 ```
 
-Ví dụ:
+_Ví dụ:_ `./sync-agents.sh ../my-client-project`
 
-```bash
-./sync-agents.sh ../my-client-project
-```
+### Chế độ Dry-run (Chạy thử nghiệm):
+
+Cả hai phương thức đồng bộ trên đều hỗ trợ flag `--dry-run` để chạy thử nghiệm xem các thay đổi về file và thư mục mà không ghi đè bất kỳ tệp thực tế nào lên đĩa:
+
+- Ví dụ npx: `npx -p github:sunkid1995/sk-specs sk-specs --dry-run`
+- Ví dụ script cục bộ: `./sync-agents.sh ../my-client-project --dry-run`
 
 > [!IMPORTANT]
-> Cả hai phương thức trên đều tự động bảo vệ dữ liệu thực tế: Các thư mục chứa tiến độ công việc thực tế của Agent (`active/`, `completed/`, `archived/`) sẽ **không bao giờ bị ghi đè hoặc xóa bỏ** nếu đã tồn tại ở dự án client.
-
-# HƯỚNG DẪN SỬ DỤNG SLASH COMMANDS (QUY TRÌNH VIẾT TẮT)
-
-Để tăng tốc độ kích hoạt workflow, bạn có thể gõ trực tiếp các câu lệnh bắt đầu bằng dấu gạch chéo `/` trong khung chat. AI Agent sẽ tự động chuyển sang workflow tương ứng:
-
-| Lệnh                   | Workflow kích hoạt  | Hành động của Agent                                                              |
-| :--------------------- | :------------------ | :------------------------------------------------------------------------------- |
-| `/sk-ba <mô-tả>`       | Business Analysis   | Tạo hoặc cập nhật `ba.md` và dừng tại Checkpoint 1 (BA Approval).                |
-| `/sk-feature <mô-tả>`  | Feature Development | Kiểm tra `ba.md`, tạo `feature.md` và dừng tại Checkpoint 2 (Design Approval).   |
-| `/sk-bugfix <mô-tả>`   | Bug Fix             | Phân tích bug, lập kế hoạch sửa lỗi trong `fix-bug.md` và dừng tại Checkpoint 2. |
-| `/sk-refactor <mô-tả>` | Safe Refactoring    | Lập kế hoạch tái cấu trúc trong `refactor.md` và dừng tại Checkpoint 2.          |
-| `/sk-review`           | Code Review         | Tự động quét diff các file đã thay đổi và sinh đánh giá trong `review.md`.       |
-| `/sk-continue`         | Resume Progress     | Tự động đọc spec hiện tại và tiếp tục công việc đang dang dở.                    |
-| `/sync` / `/update`    | Synchronize Rules   | Hướng dẫn hoặc chạy script đồng bộ hóa rules từ upstream repository.             |
-
-Chi tiết cấu hình các lệnh có thể xem tại thư mục [commands/](commands/).
-
-# PURPOSE OF EACH LAYER
-
-## rules/
-
-Global engineering constraints and output behavior.
-
-Responsible for:
-
-- architecture consistency
-- response consistency
-- implementation restrictions
-- engineering priorities
-- import organization rules
-- scalability constraints
-- persistence architecture consistency
-- automatic spec persistence
-- automatic spec loading
-- multi-agent context continuity
-- deterministic engineering outputs
+> Cả hai phương thức đều bảo vệ dữ liệu thực tế: Thư mục `active/`, `completed/`, `archived/` chứa các tài liệu tiến trình thực tế sẽ **không bao giờ bị ghi đè hoặc xóa** nếu đã tồn tại ở client.
 
 ---
 
-## skills/
+## 3. Sơ Đồ Quy Trình Làm Việc (Workflows & Diagrams)
 
-Reusable domain knowledge.
+Mọi luồng công việc đều tuân thủ nguyên lý: **Tải spec hiện tại (`spec-loading`) -> Thực thi & Cập nhật tiến độ (`progress.md`) -> Lưu trữ spec (`spec-persistence`) -> Kiểm tra tự động qua Hooks -> Phê duyệt qua Checkpoints.**
 
-Responsible for:
+```mermaid
+graph TD
+    subgraph "Luồng Vận Hành Chung (SDLC Flow)"
+        Init([Bắt đầu Task]) --> Load[Tải Spec Hiện Tại <br/> spec-loading.md]
+        Load --> Work{Loại Task?}
 
-- tech stack context
-- framework patterns
-- state management patterns
-- feature analysis behavior
-- debugging strategies
-- root cause investigation
-- regression prevention
-- safe refactor principles
-- Zustand persistence patterns
+        Work -->|Feature| FeatureFlow[Quy trình Feature]
+        Work -->|Bugfix| BugfixFlow[Quy trình Bugfix]
+        Work -->|Refactor| RefactorFlow[Quy trình Refactor]
 
----
+        FeatureFlow --> SyncSpecs[Ghi Nhận & Lưu Trữ Spec <br/> spec-persistence.md]
+        BugfixFlow --> SyncSpecs
+        RefactorFlow --> SyncSpecs
 
-## workflows/
-
-Execution workflows.
-
-Responsible for:
-
-- feature analysis
-- architecture planning
-- implementation task breakdown
-- execution sequencing
-- bug reproduction analysis
-- root cause analysis
-- safe bug fixing
-- safe refactor planning
-- legacy cleanup strategy
-- regression validation
-
----
-
-## commands/ (Đồng bộ thành .agents/skills/ tại Client)
-
-Custom Slash Commands registered to Antigravity IDE.
-
-Responsible for:
-
-- registering custom slash commands (e.g., `/sk-ba`, `/sk-feature`, `/sk-bugfix`, `/sk-refactor`, `/sk-review`, `/sk-continue`)
-- orchestrating specific workflows and template file generation
-- defining interactive checkpoint approvals with the user
-
----
-
-## hooks/
-
-Các tệp tin script thực thi tự động (Node.js/Shell) chạy tại các mốc vòng đời của quá trình phát triển (SDLC).
-
-Chịu trách nhiệm về:
-- Kiểm tra các lỗi nghiệp vụ, lỗi kỹ thuật hoặc sự trùng lặp trước khi chuyển bước.
-- Ngăn chặn sai lệch quy trình (ví dụ: cấm code khi chưa có BA, cấm review khi chưa hoàn thành code hoặc chưa chạy test).
-- Tự động hóa lặp đi lặp lại các tác vụ kiểm thử hoặc phân tích không gian làm việc.
-
----
-
-## sk-specs/
-
-Persistent engineering context shared across agents.
-
-Responsible for:
-
-- feature specifications
-- architecture decisions
-- task breakdown persistence
-- technical risk tracking
-- implementation progress tracking
-- multi-agent collaboration
-- context continuity
-- historical engineering decisions
-
-# SPEC PERSISTENCE WORKFLOW
-
-All outputs generated from:
-
-- Feature
-- Bugfix
-- Refactor
-
-should automatically persist into:
-
-```txt
-sk-specs/<work-item-name>/
+        SyncSpecs --> QualityGate{Chạy Hook Kiểm Tra <br/> exit code == 0?}
+        QualityGate -->|Không| FixHook[Sửa lỗi kỹ thuật / Test / Lint]
+        FixHook --> QualityGate
+        QualityGate -->|Có| Done([Hoàn thành & Lưu Trữ])
+    end
 ```
 
-without requiring explicit user instructions.
+### 3.1. Luồng Phát Triển Tính Năng (Feature Workflow)
 
----
+Kích hoạt bằng lệnh: `/sk-feature <mô-tả>`
 
-# DEFAULT GENERATED SPEC FILES
+```mermaid
+graph TD
+    Start([Bắt đầu Feature]) --> Phase_BA[Pha 1: Phân tích Nghiệp vụ]
+    Phase_BA --> |Tạo ba.md| Checkpoint_BA{Checkpoint 1:<br/>Duyệt BA?}
+    Checkpoint_BA -->|Không| Phase_BA
+    Checkpoint_BA -->|Có| Phase_Design[Pha 2: Thiết kế Kỹ thuật]
+    Phase_Design --> |Tạo feature.md| Checkpoint_Design{Checkpoint 2:<br/>Duyệt Thiết kế?}
+    Checkpoint_Design -->|Không| Phase_Design
+    Checkpoint_Design -->|Có| Phase_Code[Pha 3: Thực thi & Kiểm thử]
+    Phase_Code --> |Chạy hook pre-code & post-code| Checkpoint_Code{Test & Lint OK?}
+    Checkpoint_Code -->|Không| Phase_Code
+    Checkpoint_Code -->|Có| Phase_Review[Pha 4: Code Review]
+    Phase_Review --> |Tạo review.md| End([Hoàn thành & Ship])
 
-## Feature Workflow
+    style Checkpoint_BA fill:#f9f,stroke:#333,stroke-width:2px
+    style Checkpoint_Design fill:#f9f,stroke:#333,stroke-width:2px
+    style Checkpoint_Code fill:#ff9,stroke:#333,stroke-width:2px
+```
 
-```txt
-sk-specs/<feature-name>/
-├── ba.md
-├── feature.md
-├── review.md
-├── decisions.md
-├── risks.md
-└── progress.md
+### 3.2. Luồng Sửa Lỗi (Bugfix Workflow)
+
+Kích hoạt bằng lệnh: `/sk-bugfix <mô-tả>`
+
+```mermaid
+graph TD
+    Start([Bắt đầu Sửa lỗi]) --> Phase_RCA[Pha 1: Tái hiện & Phân tích nguyên nhân]
+    Phase_RCA --> |Viết Test case tái hiện lỗi| Phase_Plan[Pha 2: Lập kế hoạch sửa lỗi]
+    Phase_Plan --> |Tạo fix-bug.md| Checkpoint_Plan{Checkpoint 2:<br/>Duyệt Kế hoạch?}
+    Checkpoint_Plan -->|Không| Phase_Plan
+    Checkpoint_Plan -->|Có| Phase_Fix[Pha 3: Viết Code Sửa lỗi]
+    Phase_Fix --> |Chạy hook post-code| Checkpoint_Fix{Pass các Test & Lint?}
+    Checkpoint_Fix -->|Không| Phase_Fix
+    Checkpoint_Fix -->|Có| Phase_Review[Pha 4: Code Review]
+    Phase_Review --> |Tạo review.md| End([Hoàn thành])
+
+    style Checkpoint_Plan fill:#f9f,stroke:#333,stroke-width:2px
+    style Checkpoint_Fix fill:#ff9,stroke:#333,stroke-width:2px
+```
+
+### 3.3. Luồng Tái Cấu Trúc (Refactor Workflow)
+
+Kích hoạt bằng lệnh: `/sk-refactor <mô-tả>`
+
+```mermaid
+graph TD
+    Start([Bắt đầu Refactor]) --> Phase_Assess[Pha 1: Đánh giá tác động]
+    Phase_Assess --> |Xác nhận Test suite cũ| Phase_Plan[Pha 2: Kế hoạch Refactor]
+    Phase_Plan --> |Tạo refactor.md| Checkpoint_Plan{Checkpoint 2:<br/>Duyệt Kế hoạch?}
+    Checkpoint_Plan -->|Không| Phase_Plan
+    Checkpoint_Plan -->|Có| Phase_Execute[Pha 3: Thực thi Refactor]
+    Phase_Execute --> |Chạy hook post-code| Checkpoint_Test{Pass tất cả Test cũ & mới?}
+    Checkpoint_Test -->|Không| Phase_Execute
+    Checkpoint_Test -->|Có| Phase_Review[Pha 4: Code Review]
+    Phase_Review --> |Tạo review.md| End([Hoàn thành])
+
+    style Checkpoint_Plan fill:#f9f,stroke:#333,stroke-width:2px
+    style Checkpoint_Test fill:#ff9,stroke:#333,stroke-width:2px
 ```
 
 ---
 
-## Bugfix Workflow
+## 4. Hệ Thống Slash Commands & Checkpoints
 
-```txt
-sk-specs/<bug-name>/
-├── ba.md
-├── fix-bug.md
-├── review.md
-├── decisions.md
-├── risks.md
-└── progress.md
-```
+Để tăng tốc độ tương tác, gõ trực tiếp các lệnh gạch chéo `/` trong khung chat:
 
----
-
-## Refactor Workflow
-
-```txt
-sk-specs/<refactor-name>/
-├── ba.md
-├── refactor.md
-├── review.md
-├── decisions.md
-├── risks.md
-└── progress.md
-```
-
-# SPEC LOADING BEHAVIOR
-
-Before generating new outputs:
-
-1. Automatically search existing specs in:
-   `sk-specs/`
-
-2. Automatically load:
-   - feature analysis
-   - architecture decisions
-   - implementation plans
-   - technical risks
-   - progress tracking
-
-3. Reuse existing decisions whenever possible.
-
-4. Avoid generating conflicting architecture or duplicated plans.
-
-# EXPECTED PROMPT SIZE REDUCTION
-
-Before setup:
-
-```md
-Feature:
-...
-
-Requirements:
-...
-
-Tech stack:
-...
-
-Generate:
-...
-```
-
-Before setup for bugfix:
-
-```md
-Bug:
-...
-
-Expected:
-...
-
-Actual:
-...
-```
-
-Before setup for refactor:
-
-```md
-Refactor:
-...
-```
-
-After setup:
-
-#### Feature Workflow Flow
-
-**Step 1: Business Analysis** (Generates `ba.md`)
-
-```md
-BA: Persist current todo tab
-```
-
-**Step 2: Design & Code** (Generates `feature.md`)
-
-```md
-Feature: Persist current todo tab
-```
-
-**Step 3: Review Code** (Generates `review.md`)
-
-```md
-Review: Persist current todo tab
-```
+| Lệnh                   | Workflow kích hoạt  | Checkpoint dừng duyệt                                                                     | Kết quả đầu ra               |
+| :--------------------- | :------------------ | :---------------------------------------------------------------------------------------- | :--------------------------- |
+| `/sk-ba <mô-tả>`       | Business Analysis   | **Checkpoint 1 (BA Approval)**: Phê duyệt đặc tả nghiệp vụ trước khi thiết kế.            | `ba.md`                      |
+| `/sk-feature <mô-tả>`  | Feature Development | **Checkpoint 2 (Design Approval)**: Phê duyệt thiết kế kỹ thuật trước khi code.           | `feature.md`, `progress.md`  |
+| `/sk-bugfix <mô-tả>`   | Bug Fix             | **Checkpoint 2 (Design Approval)**: Phê duyệt kế hoạch sửa lỗi và test case tái hiện lỗi. | `fix-bug.md`, `progress.md`  |
+| `/sk-refactor <mô-tả>` | Safe Refactoring    | **Checkpoint 2 (Design Approval)**: Phê duyệt phạm vi tái cấu trúc và rủi ro hồi quy.     | `refactor.md`, `progress.md` |
+| `/sk-review`           | Code Review         | Không dừng, tự động quét và đánh giá mã nguồn thực tế.                                    | `review.md`                  |
+| `/sk-continue`         | Resume Progress     | Đọc các file spec và tiếp tục task đang dang dở.                                          | Khôi phục ngữ cảnh           |
+| `/sk-status`           | Project Status      | Không dừng, truy vấn trạng thái hiện tại của dự án và các tệp đặc tả.                     | Báo cáo tiến độ dự án        |
 
 ---
 
-#### Bugfix Workflow Flow
+## 5. Cơ Chế Agent Hooks (Quality Gates)
 
-**Step 1: Find/Create BA & Reproduce Bug** (Generates `fix-bug.md`)
+Các Hook tự động chạy tại các điểm vòng đời nhằm bảo vệ chất lượng dự án tại Client Workspace. Hooks được lưu tại `sk-specs/hooks/` ở root client workspace.
 
-```md
-Bugfix: Todo tab resets after refresh
-```
+| Hook                 | Loại      | Chức năng                                                                                                                    |
+| :------------------- | :-------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| **`pre-ba.js`**      | Pre-hook  | Cảnh báo chồng chéo nếu có tính năng song song khác đang phát triển trong `sk-specs/active/`.                                |
+| **`post-ba.js`**     | Post-hook | Placeholder — mở rộng xử lý sau khi hoàn thành BA.                                                                           |
+| **`pre-design.js`**  | Pre-hook  | Chặn thiết kế kỹ thuật nếu `ba.md` chưa hoàn thiện hoặc còn chứa placeholder (`TODO`, `TBD`).                                |
+| **`post-design.js`** | Post-hook | Placeholder — mở rộng xử lý sau khi hoàn thành thiết kế.                                                                     |
+| **`pre-code.js`**    | Pre-hook  | Phát hiện và cảnh báo các component, hook, utility bị trùng tên hoặc sai cấu trúc folder (Flat files).                       |
+| **`post-code.js`**   | Post-hook | Tự động chạy unit test (`vitest`) và linter (`eslint`). Ràng buộc tỷ lệ coverage tối thiểu 80%.                              |
+| **`pre-review.js`**  | Pre-hook  | Đảm bảo checklist tiến độ hoàn thành và có thay đổi mã nguồn thực tế trong Git trước khi tạo review.                         |
+| **`post-review.js`** | Post-hook | Kiểm tra khi có `review.md` và `progress.md` đạt `Completed` để di chuyển thư mục tiến trình từ `active/` sang `completed/`. |
 
-**Step 2: Review Code** (Generates `review.md`)
+> [!CAUTION]
+> Nếu bất kỳ script hook nào trả về mã lỗi (`exit code != 0`), Agent sẽ **dừng lại ngay lập tức** và yêu cầu người dùng khắc phục lỗi trước khi chuyển bước tiếp theo.
 
-```md
-Review: Todo tab resets after refresh
-```
+### Cơ chế Versioning & Bảo vệ Hook Tùy Chỉnh (Hook Versioning & Conflict Resolution)
 
----
+Các Hook mẫu trong `sk-specs/hooks/` được đồng bộ từ kho chứa nguồn và nâng cấp tự động nhờ cơ chế so khớp SHA-256 qua manifest tệp `.hooks-manifest.json`:
 
-#### Refactor Workflow Flow
-
-**Step 1: Find/Create BA & Plan Refactor** (Generates `refactor.md`)
-
-```md
-Refactor: Todo page state management
-```
-
-**Step 2: Review Code** (Generates `review.md`)
-
-```md
-Review: Todo page state management
-```
+- Khi cập nhật cấu hình `sk-specs`, nếu người dùng **chưa tùy chỉnh** các tệp hook (mã băm của tệp khớp với mã băm lưu tại manifest): Các tệp hook sẽ tự động được ghi đè phiên bản mới nhất.
+- Nếu người dùng **đã tùy biến** logic hook (mã băm hiện tại khác phiên bản manifest): Phiên bản nâng cấp mới của hook sẽ được lưu dưới tên `<tên-hook>.upstream` (ví dụ: `pre-code.js.upstream`). Người dùng có thể so sánh và thực hiện merge thủ công để không bị mất các logic tùy chỉnh riêng của dự án.
 
 ---
 
-#### Continue interrupted work
+## 6. Lợi Ích & Tầm Nhìn Kỹ Thuật
 
-```md
-Continue: Persist current todo tab
-```
-
-The agent will automatically:
-
-- load previous specs
-- continue existing workflow
-- preserve architectural decisions
-- maintain execution continuity
-
-# AGENT HOOKS SYSTEM
-
-Hệ thống Agent Hooks cung cấp cơ chế tự động thực thi các kịch bản kiểm tra trước và sau mỗi giai đoạn phát triển chính. Điều này giúp thiết lập các cổng chất lượng (Quality Gates) nghiêm ngặt, ngăn chặn phát sinh code trùng lặp và bảo vệ tính toàn vẹn của mã nguồn.
-
-## 1. Cơ chế Hoạt động
-- **Kích hoạt tự động**: Khi Agent chạy một slash command tương ứng với workflow, Agent sẽ tự động tìm và chạy hook tương ứng:
-  - Trước khi bắt đầu giai đoạn: Chạy `sk-specs/hooks/pre-<giai-đoạn>.[js|sh]`
-  - Sau khi hoàn thành giai đoạn: Chạy `sk-specs/hooks/post-<giai-đoạn>.[js|sh]`
-- **Ràng buộc kết quả**: Nếu bất kỳ script nào trả về mã thoát khác 0 (exit code != 0), AI Agent sẽ **dừng lại ngay lập tức**, báo cáo chi tiết lỗi cho người dùng và yêu cầu xử lý trước khi tiếp tục.
-
-## 2. Các Hooks Mặc định Cung cấp
-- **`pre-ba.js`**: Quét thư mục `sk-specs/active/` để liệt kê các tính năng song song đang phát triển, đưa ra cảnh báo để tránh chồng chéo nghiệp vụ.
-- **`pre-design.js`**: Kiểm tra sự tồn tại của tệp `ba.md`. Ngăn chặn bắt đầu thiết kế kỹ thuật nếu chưa hoàn thành phân tích nghiệp vụ hoặc còn chứa placeholder chưa điền (`TODO`, `TBD`).
-- **`pre-code.js`**: Quét workspace để phát hiện và cảnh báo các component, hooks, utility trùng tên hoặc cấu trúc file không đúng chuẩn (Flat files).
-- **`post-code.js`**: Chạy unit tests (Vitest) và linter (`lint`), bắt buộc sửa hết lỗi trước khi chuyển sang review.
-- **`pre-review.js`**: Xác thực độ hoàn thiện của checklist trong `progress.md` và đảm bảo có file thay đổi thực tế trong Git trước khi tiến hành review.
-
----
-
-# RECOMMENDED FUTURE FILES
-
-Additional recommended skills:
-
-```txt
-.agents/skills/
-├── api-design.md
-├── react-query-patterns.md
-├── ui-accessibility.md
-├── folder-structure.md
-├── async-state-patterns.md
-└── persistence-migration.md
-```
-
-Additional recommended workflows:
-
-```txt
-.agents/workflows/
-├── migration-workflow.md
-├── optimization-workflow.md
-├── release-checklist.md
-├── performance-audit.md
-├── state-migration.md
-└── dependency-cleanup.md
-```
-
-# SOFTWARE DEVELOPMENT WORKFLOW BENEFITS
-
-- smaller prompts
-- deterministic outputs
-- reusable engineering workflows
-- persistent engineering memory
-- lower implementation context size
-- safer bugfix workflows
-- safer refactor workflows
-- reduced regression risk
-- support for multi-agent collaboration (optional)
-- architecture continuity
-- shared implementation context
-- reduced AI hallucination
-- better long-running feature support
-- scalable AI engineering pipeline
-- historical engineering traceability
-
-# LONG TERM ARCHITECTURE VISION
-
-```txt
-Idea
- → Feature Spec
- → Architecture
- → Task Breakdown
- → Implementation
- → QA
- → Release
- → Archive
-```
-
-All stages share the same persistent engineering context through:
-
-```txt
-sk-specs/
-```
+- **Context Continuity (Tính liên tục)**: Chuyển giao công việc giữa các Agent dễ dàng, không phụ thuộc vào bộ nhớ chat cũ.
+- **Deterministic Outputs (Tính nhất quán)**: Thiết kế mã nguồn có tính kế thừa và thống nhất, giảm thiểu mã nguồn bị phân mảnh.
+- **Prompt Size & Cost Control (Tiết kiệm token)**: Tiết kiệm token và tăng tốc độ xử lý vì Agent chỉ cần nạp tệp đặc tả tinh giản thay vì quét toàn bộ repository lớn.
+- **Regression Safety (An toàn hồi quy)**: Bắt buộc phải viết test case tái hiện lỗi và đảm bảo test suite chạy thành công trước khi ship code.
