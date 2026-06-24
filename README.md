@@ -33,41 +33,42 @@ Dưới đây là sơ đồ cây thư mục sau khi đã đồng bộ hóa `sk-s
 │   └── sk-specs/                     # Bản sao cấu hình gốc (rules, skills, workflows, templates)
 │       ├── rules/
 │       │   ├── architecture-rules.md
+│       │   ├── code-review-rules.md
+│       │   ├── code-styling.md
 │       │   ├── core-rules.md
 │       │   ├── folder-structure-and-export-rules.md
-│       │   ├── import-rule.md
+│       │   ├── guru-architecture-rules.md    # Các nguyên lý SOLID và thiết kế kiến trúc chuẩn mực (Guru)
+│       │   ├── guru-code-rules.md            # Các quy tắc TypeScript, React Component và Testing (Guru)
+│       │   ├── import-rules.md
 │       │   ├── output-format.md
-│       │   ├── security-rules.md
-│       │   ├── slash-commands.md
 │       │   ├── spec-loading.md
-│       │   ├── spec-persistence.md
-│       │   └── testing-rules.md
+│       │   └── spec-persistence.md
 │       │
 │       ├── skills/
 │       │   ├── business-analysis/
-│       │   │   └── SKILL.md
 │       │   ├── code-review-principles/
-│       │   │   └── SKILL.md
+│       │   ├── core-agent/
 │       │   ├── debugging-patterns/
-│       │   │   └── SKILL.md
+│       │   ├── dispatching-parallel-agents/
+│       │   ├── eslint-rules/
+│       │   ├── executing-plans/
 │       │   ├── feature-analysis/
-│       │   │   └── SKILL.md
 │       │   ├── frontend-stack/
-│       │   │   └── SKILL.md
-│       │   ├── performance-optimization/
-│       │   │   └── SKILL.md
+│       │   ├── grill-me/
+│       │   ├── guru-refactoring/             # Phát hiện code smells và cẩm nang lựa chọn Design Patterns (Guru)
+│       │   ├── guru-workflow/                # Luồng làm việc 4 pha và checklist tự đánh giá chất lượng (Guru)
+│       │   ├── handoff/
 │       │   ├── react-zustand-patterns/
-│       │   │   └── SKILL.md
+│       │   ├── receiving-code-review/
 │       │   ├── refactor-principles/
-│       │   │   └── SKILL.md
 │       │   ├── regression-safety/
-│       │   │   └── SKILL.md
+│       │   ├── requesting-code-review/
 │       │   ├── reviewing-code/
-│       │   │   └── SKILL.md
+│       │   ├── skill-creator/
+│       │   ├── subagent-driven-development/
 │       │   ├── systematic-debugging/
-│       │   │   └── SKILL.md
-│       │   └── vietnamese-assistant/
-│       │       └── SKILL.md
+│       │   ├── test-driven-development/
+│       │   └── vietnamese_assistant/
 │       │
 │       ├── workflows/
 │       │   ├── business-analysis.md
@@ -92,7 +93,10 @@ Dưới đây là sơ đồ cây thư mục sau khi đã đồng bộ hóa `sk-s
 │           └── risks.md
 │
 └── sk-specs/                         # Dữ liệu tiến độ thực tế (tại root client workspace)
-    ├── hooks/                        # Quality Gates scripts (đồng bộ từ hooks/ của repo)
+    ├── hooks/                        # Quality Gates & Tools (đồng bộ từ hooks/ của repo)
+    │   ├── config-loader.js          # Bộ nạp cấu hình động sk-specs.config.json
+    │   ├── generate-spec-indexes.js  # Tự động lập chỉ mục và gán keywords tìm kiếm spec
+    │   ├── generate-workspace-intelligence.js # Phân tích tĩnh AST toàn bộ project
     │   ├── pre-ba.js
     │   ├── post-ba.js
     │   ├── pre-design.js
@@ -100,7 +104,11 @@ Dưới đây là sơ đồ cây thư mục sau khi đã đồng bộ hóa `sk-s
     │   ├── pre-code.js
     │   ├── post-code.js
     │   ├── pre-review.js
-    │   └── post-review.js
+    │   ├── post-review.js
+    │   └── intelligence/             # Mô-đun phân tích mã nguồn AST
+    │       ├── ast-parser.js
+    │       ├── graph-analyzer.js
+    │       └── reporter.js
     │
     ├── active/                       # Các task đang được thực hiện
     ├── completed/                    # Các task đã hoàn thành
@@ -302,6 +310,7 @@ Các Hook mẫu trong `sk-specs/hooks/` được đồng bộ từ kho chứa ng
 Bộ khung hỗ trợ cơ chế cấu hình động giúp tách biệt logic dùng chung của AI Agent và cấu trúc nghiệp vụ đặc thù của từng dự án client (như các aliases, thư mục bỏ qua, danh sách stop words hoặc từ khóa nghiệp vụ).
 
 ### 6.1. Tệp cấu hình `sk-specs.config.json`
+
 Tệp cấu hình đặt tại thư mục gốc của dự án Client. Ví dụ cấu trúc tệp:
 
 ```json
@@ -312,26 +321,42 @@ Tệp cấu hình đặt tại thư mục gốc của dự án Client. Ví dụ 
     "@store": "app/store"
   },
   "ignoredDirs": [
-    "node_modules", ".git", "dist", "build", ".agents", "coverage"
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    ".agents",
+    "coverage"
   ],
   "sourceExtensions": [".ts", ".tsx", ".js", ".jsx"],
-  "featureKeywords": [
-    "auth", "todo", "chat", "setting"
-  ],
-  "stopWords": [
-    "fix", "refactor", "update", "and", "the"
-  ]
+  "featureKeywords": ["auth", "todo", "chat", "setting"],
+  "stopWords": ["fix", "refactor", "update", "and", "the"]
 }
 ```
 
 ### 6.2. Cơ chế tự động tìm nạp (Automatic Configuration Resolution)
+
 Theo quy tắc cấu hình trong [core-rules.md](rules/core-rules.md), Agent được yêu cầu hoạt động hoàn toàn tự động mà không cần người dùng tự khai báo thủ công:
+
 1. **Kiểm tra tự động**: Agent sẽ tìm nạp `sk-specs.config.json` khi bắt đầu công việc.
 2. **Tự động phân tích & khởi tạo**: Nếu chưa có tệp hoặc thiếu các trường cấu hình cốt lõi, Agent bắt buộc phải tự quét mã nguồn của Client (aliases từ `tsconfig.json` hoặc `vite.config.ts`, các folder nghiệp vụ, cấu trúc thư mục) và tự động tạo mới hoặc cập nhật đầy đủ các trường vào tệp `sk-specs.config.json`.
 
+## 7. Bộ quy chuẩn và kỹ năng Guru (Guru Standards & Skills)
+
+Để hỗ trợ tái cấu trúc mã nguồn chất lượng cao, hệ thống tích hợp các quy tắc và kỹ năng có tiền tố `guru-` nhằm chuẩn hóa thiết kế phần mềm:
+
+- **Quy tắc Kiến trúc & Viết Code**:
+  - [guru-architecture-rules.md](rules/guru-architecture-rules.md) & [guru-code-rules.md](rules/guru-code-rules.md): Định nghĩa các tiêu chuẩn kiến trúc SOLID, cấu trúc React Component gọn nhẹ (< 200 dòng) và cách kiểm soát dependencies.
+- **Kỹ năng Phát hiện Code Smells & Refactoring**:
+  - [guru-refactoring](skills/guru-refactoring/): Hướng dẫn chi tiết cách phát hiện các dấu hiệu nợ kỹ thuật (Long Method, switch explosion, primitive obsession...) và chọn lựa mẫu thiết kế phù hợp (Strategy, Factory, Builder, Facade...).
+  - [guru-workflow](skills/guru-workflow/): Quy định nghiêm ngặt quy trình phát triển 4 pha (Analyze -> Design -> Implement -> Review) và danh sách tự kiểm định chất lượng (Final Validation Checklist).
+
+> [!NOTE]
+> 📌 **Nguồn tham khảo lý thuyết (Source)**: Các nguyên lý tái cấu trúc và phát hiện code smells của Guru được xây dựng dựa trên tài liệu chuẩn mực tại [Refactoring.Guru](https://refactoring.guru/refactoring).
+
 ---
 
-## 7. Lợi Ích & Tầm Nhìn Kỹ Thuật
+## 8. Lợi Ích & Tầm Nhìn Kỹ Thuật
 
 - **Context Continuity (Tính liên tục)**: Chuyển giao công việc giữa các Agent dễ dàng, không phụ thuộc vào bộ nhớ chat cũ.
 - **Deterministic Outputs (Tính nhất quán)**: Thiết kế mã nguồn có tính kế thừa và thống nhất, giảm thiểu mã nguồn bị phân mảnh.
