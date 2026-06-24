@@ -34,7 +34,7 @@ graph TD
 ## 2. Root Cause Analysis (RCA)
 - Apply the "5 Whys" method to trace state mutations or logic branches. Find out *why* the bad state occurred rather than patching symptoms.
 - Propose a targeted, minimal fix strategy.
-- Generate or update `fix-bug.md` under `sk-specs/active/<work-item-name>/` using `templates/fix-bug.md`.
+- Generate or update `fix-bug.md` under `.agents/sk-specs/active/<work-item-name>/` using `templates/fix-bug.md`.
 
 ## 3. Plan Approval Checkpoint (Blocking)
 - Present the planned fix, reproduction steps, and regression risks to the user.

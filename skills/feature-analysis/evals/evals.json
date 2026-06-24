@@ -1,11 +1,19 @@
 {
-  "skill_name": "feature-analysis",
+  "skill_name": "feature-analysis-skill",
   "evals": [
     {
       "id": 1,
-      "prompt": "Feature: Xây dựng bộ lọc tìm kiếm nâng cao cho ứng dụng chat. Hãy phân tích tính năng và sinh tài liệu roadmap triển khai.",
-      "expected_output": "Tài liệu roadmap triển khai chi tiết lưu vào sk-specs/ nâng cao, chia làm các phase rõ ràng và liệt kê tối thiểu 5 rủi ro kỹ thuật hoặc 10 test cases.",
-      "files": []
+      "prompt": "Analyze this feature request and generate a technical design plan: Add an advanced search filter to the message list so users can filter by date range, sender name, and message status.",
+      "expected_output": "Structured feature analysis report written to sk-specs/ containing Feature Summary, Requirements Analysis, Implementation Phases, Reusable Modules, Technical Risks, Execution Order, and Validation Strategy.",
+      "expectations": [
+        "The analysis includes a 'Feature Summary' section.",
+        "The analysis includes a 'Requirements Analysis' section.",
+        "The analysis includes an 'Implementation Phases' section.",
+        "The analysis includes a 'Reusable Modules' section.",
+        "The analysis includes a 'Technical Risks' section.",
+        "The analysis includes a 'Validation Strategy' section.",
+        "The output specifies saving the analysis to sk-specs/<normalized-feature-name>/01-feature-analysis.md."
+      ]
     }
   ]
 }

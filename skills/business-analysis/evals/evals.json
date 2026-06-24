@@ -3,9 +3,16 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Hãy thực hiện phân tích nghiệp vụ cho tính năng ghim tin nhắn (Pin Message) trong ứng dụng chat. Các yêu cầu nghiệp vụ gồm: cho phép ghim tin nhắn, cập nhật thời gian thực qua socket cluster, người tạo tin nhắn hoặc admin mới có quyền xóa tin nhắn ghim, kiểm tra quyền admin trước khi thực hiện.",
-      "expected_output": "Tài liệu phân tích BA chi tiết bằng tiếng Việt chứa đầy đủ 5 phần theo chuẩn, đặc biệt làm rõ các edge cases về kết nối mạng, quyền xóa tin nhắn ghim và kiểm tra quyền admin.",
-      "files": []
+      "prompt": "Analyze the business requirements for this new feature: Allow chat room admins to pin important messages to the top of the chat room so that all members can quickly view them.",
+      "expected_output": "Structured business analysis identifying goals, stakeholders, scope, socket/API dependencies, message deletion edge cases, and acceptance criteria.",
+      "expectations": [
+        "The analysis identifies 'chat room admins' and 'members' as Stakeholders.",
+        "The analysis identifies Socket real-time updates (SocketCluster) as a Dependency.",
+        "The analysis identifies message deletion (either by the author or an admin) as an Edge Case.",
+        "The analysis includes a section for 'Acceptance Criteria'.",
+        "The analysis includes a section for 'Assumptions'.",
+        "The analysis is structured with Goals, Scope, Dependencies, Edge Cases & Risks, and Acceptance Criteria."
+      ]
     }
   ]
 }

@@ -1,86 +1,60 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
-function preReviewHook() {
-  const rootDir = process.cwd();
-  console.log(`=== [PRE-REVIEW HOOK] Kiểm tra điều kiện trước khi Code Review: ${rootDir} ===\n`);
+const taskName = process.argv[2];
+console.log('=== Running pre-review Hook ===');
 
-  // Lấy tên work-item
-  let workItem = process.argv[2];
-  const activeSpecsDir = path.join(rootDir, 'sk-specs', 'active');
+if (!taskName) {
+  console.error('LỖI: Tên task không được truyền vào hook.');
+  process.exit(1);
+}
 
-  if (!workItem && fs.existsSync(activeSpecsDir)) {
-    const activeItems = fs.readdirSync(activeSpecsDir).filter(item => {
-      const itemPath = path.join(activeSpecsDir, item);
-      return fs.statSync(itemPath).isDirectory();
-    });
-    
-    if (activeItems.length > 0) {
-      activeItems.sort((a, b) => {
-        const statA = fs.statSync(path.join(activeSpecsDir, a));
-        const statB = fs.statSync(path.join(activeSpecsDir, b));
-        return statB.mtimeMs - statA.mtimeMs;
-      });
-      workItem = activeItems[0];
-    }
-  }
+const taskDir = path.join(process.cwd(), 'sk-specs', taskName);
 
-  if (!workItem) {
-    console.error("❌ LỖI: Không tìm thấy task active nào để kiểm tra Code Review.");
+if (!fs.existsSync(taskDir)) {
+  console.error(`LỖI: Thư mục task "${taskName}" không tồn tại tại sk-specs/.`);
+  process.exit(1);
+}
+
+try {
+  // 1. Kiểm tra Git diff trên toàn bộ repository (nới lỏng điều kiện)
+  const rawDiff = execSync('git status --porcelain', { encoding: 'utf8' }).trim();
+  const gitDiff = rawDiff
+    .split('\n')
+    .map(line => line.slice(3).trim())
+    .filter(file => file !== '' && !file.includes('.DS_Store') && !file.endsWith('.log'))
+    .join('\n');
+  
+  if (!gitDiff) {
+    console.error('\x1b[31m%s\x1b[0m', 'LỖI: Không phát hiện bất kỳ thay đổi nào trong repository.');
+    console.error('Bạn không thể tiến hành Code Review khi chưa thực hiện bất cứ sửa đổi nào.');
     process.exit(1);
   }
 
-  console.log(`Đang kiểm tra tiến trình của task: "${workItem}"...`);
-  
-  // 1. Kiểm tra progress.md
-  const progressPath = path.join(activeSpecsDir, workItem, 'progress.md');
-  if (fs.existsSync(progressPath)) {
-    const progressContent = fs.readFileSync(progressPath, 'utf8');
-    
-    // Tìm các task chưa hoàn thành: "[ ]" hoặc "[/]"
-    const unfinishedTasks = [];
-    const lines = progressContent.split('\n');
-    lines.forEach(line => {
-      if (line.includes('- [ ]') || line.includes('- [/]')) {
-        unfinishedTasks.push(line.trim());
-      }
-    });
+  // 2. Kiểm tra sự tồn tại đầy đủ của tài liệu đặc tả
+  const files = fs.readdirSync(taskDir);
+  const requiredPrefixes = ['01-', '02-', '03-'];
+  const missingPrefixes = [];
 
-    if (unfinishedTasks.length > 0) {
-      console.warn(`⚠️  CẢNH BÁO: Phát hiện các task chưa hoàn thành trong 'progress.md':`);
-      unfinishedTasks.forEach(task => console.warn(`  * ${task}`));
-      console.warn("-> GỢI Ý: Vui lòng cập nhật và hoàn thành toàn bộ các checklist trong progress.md.");
-    } else {
-      console.log("✅ Tất cả các checklist trong progress.md đã được đánh dấu hoàn thành [x].");
+  requiredPrefixes.forEach(prefix => {
+    const found = files.find(f => f.startsWith(prefix) && f.endsWith('.md'));
+    if (!found) {
+      missingPrefixes.push(prefix);
     }
-  } else {
-    console.warn(`⚠️  Cảnh báo: Không tìm thấy tệp 'progress.md' tại ${progressPath}. Bỏ qua kiểm tra checklist.`);
+  });
+
+  if (missingPrefixes.length > 0) {
+    console.error('\x1b[31m%s\x1b[0m', `LỖI: Thư mục task "${taskName}" thiếu tài liệu đặc tả bắt đầu bằng: ${missingPrefixes.join(', ')}`);
+    console.error('Yêu cầu phải có đầy đủ 01-*.md (BA), 02-*.md (Architecture), 03-*.md (Task Breakdown) trước khi review.');
+    process.exit(1);
   }
 
-  // 2. Kiểm tra Git diff (đảm bảo có code thay đổi để review)
-  try {
-    const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' }).trim();
-    if (!gitStatus) {
-      console.error("❌ LỖI RÀNG BUỘC: Không phát hiện thấy bất kỳ file nào thay đổi trong Git (Git working tree sạch).");
-      console.error("-> YÊU CẦU: Bạn phải có mã nguồn được chỉnh sửa/thêm mới thì mới có thể tiến hành Code Review.");
-      process.exit(1);
-    } else {
-      console.log("✅ Phát hiện các file có thay đổi trong Git sẵn sàng để review:");
-      const modifiedFiles = gitStatus.split('\n').slice(0, 5);
-      modifiedFiles.forEach(file => console.log(`  * ${file}`));
-      if (gitStatus.split('\n').length > 5) {
-        console.log(`  ... và ${gitStatus.split('\n').length - 5} tệp tin khác.`);
-      }
-    }
-  } catch (error) {
-    console.warn("⚠️  Cảnh báo: Không thể chạy lệnh Git. Có thể dự án chưa được khởi tạo Git. Bỏ qua kiểm tra Git status.");
-  }
-
-  console.log("\n=== [PRE-REVIEW HOOK] Hoàn thành ===\n");
+  console.log('Xác thực trước Code Review thành công: Git diff hợp lệ và tài liệu đặc tả đầy đủ.');
   process.exit(0);
+} catch (error) {
+  console.error('Lỗi khi chạy pre-review hook:', error.message);
+  process.exit(1);
 }
-
-preReviewHook();

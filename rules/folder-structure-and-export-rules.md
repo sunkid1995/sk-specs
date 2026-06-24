@@ -1,7 +1,12 @@
 ---
+trigger: always_on
+---
+
+---
+
 name: folder-structure-and-export-rules
-description: Folder-first structure and default export conventions for components, hooks, and stores.
-version: 1.0.0
+description: Enforce scalable folder-first architecture and default export conventions for components and hooks.
+
 ---
 
 # Folder Structure Rules

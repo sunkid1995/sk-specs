@@ -38,7 +38,7 @@ graph TD
   - 🟢 **Positive / Nitpick** (Good implementations, suggestions)
 
 ## 4. Report Generation
-- Generate the structured review report `review.md` under `sk-specs/active/<work-item-name>/` using `templates/sk-review.md`.
+- Generate the structured review report `review.md` under `.agents/sk-specs/active/<work-item-name>/` using `templates/review.md`.
 - The report must strictly contain 4 Vietnamese sections:
   1. *Đánh giá tổng thể*
   2. *Đánh giá bổ sung*

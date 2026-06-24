@@ -1,163 +1,131 @@
 ---
+trigger: always_on
+description: Hướng dẫn tự động tạo và lưu trữ tài liệu đặc tả (specification) mới theo đúng cấu trúc sk-specs cho mọi tác vụ feature, bugfix hoặc refactor.
+---
+
+---
+
 name: spec-persistence
-description: Spec persistence behavior — file structure, workflow rules, test case requirements, and progress tracking.
-version: 3.0.0
+version: 2.1.0
+description: Hướng dẫn tự động tạo và lưu trữ tài liệu đặc tả (specification) mới theo đúng cấu trúc sk-specs cho mọi tác vụ feature, bugfix hoặc refactor.
+
 ---
 
 # SPEC PERSISTENCE BEHAVIOR
 
-For every:
+Tự động sinh spec cho mọi task: feature, bugfix, refactor, code review.
 
-- Feature
-- Refactor
-- Bug
+Lưu vào:
 
-Automatically persist outputs into:
+```
+sk-specs/<kebab-case-task-name>/
+```
 
-sk-specs/<work-item-name>/
+---
 
-# FILE STRUCTURE
+# TRƯỚC KHI TẠO SPEC MỚI (BẮT BUỘC)
 
-Feature:
+**Khi `pre-ba` trả về exit code 2**, Agent PHẢI dừng lại và hỏi user:
 
-- ba.md
-- feature.md
-- review.md
-- decisions.md
-- risks.md
-- progress.md
+> _"Tôi tìm thấy các spec sau có thể liên quan đến yêu cầu này:_
+> _[Liệt kê danh sách từ output pre-ba]_
+> _Yêu cầu này là **cập nhật** spec đã có hay **tạo mới** hoàn toàn?"_
 
-Refactor:
+**Nếu user chọn cập nhật**: Bổ sung vào spec folder đã có, **KHÔNG** tạo folder mới.
 
-- ba.md
-- refactor.md
-- review.md
-- decisions.md
-- risks.md
-- progress.md
+**Nếu user chọn tạo mới**: Tạo folder `sk-specs/<task-name>/` và tiếp tục quy trình bình thường.
 
-Bug:
+**Chỉ tạo folder mới ngay lập tức khi:**
 
-- ba.md
-- fix-bug.md
-- review.md
-- decisions.md
-- risks.md
-- progress.md
+- `pre-ba` trả về exit code 0 (không có spec tương đồng), **hoặc**
+- User đã xác nhận rõ ràng đây là task mới.
 
-# WORKFLOW RULES
+---
 
-Feature:
+# BẮT BUỘC: \_index.md
 
-BA
-→ Feature
-→ Review
+Mỗi spec folder PHẢI có file `_index.md` tối đa 8 dòng:
 
-Refactor:
+```md
+task: <tên task ngắn gọn>
+type: feature | bugfix | refactor | review
+files:
 
-BA
-→ Refactor
-→ Review
+- <path/to/file1>
+- <path/to/file2>
+  risk: <rủi ro quan trọng nhất, 1 câu>
+  status: active | done
+  search: <keyword1>, <keyword2>, <keyword3>
+```
 
-Bug:
+Field `search` chứa các keyword segment mô tả domain/concept của task.
+Dùng để Agent phát hiện semantic overlap với spec khác mà không cần đọc chi tiết.
 
-BA
-→ Fix Bug
-→ Review
+Ví dụ keyword tốt: `todo, filter, dateRange, toggle, important, checklist`
+Không dùng: `fix, refactor, bug, feature, index, component, src`
 
-# REVIEW RULES
+---
 
-Review is mandatory.
+# FORMAT SPEC (BẮT BUỘC)
 
-Review must validate:
+## Giới hạn kích thước
 
-1. Business requirements
-2. Acceptance criteria
-3. Architecture compliance
-4. Code quality
+- Mỗi file spec: **tối đa 80 dòng**
+- Sử dụng Mermaid diagram tối giản khi mô tả flow hoạt động, hướng xử lý trong 02-architecture.md
+- Không ghi narrative/bối cảnh dài
+- Không ghi update log (`Cập nhật DD/MM`)
+- Không lặp thông tin giữa các file
 
-# TEST CASE REQUIREMENTS
+## Cấu trúc bắt buộc — 4 section
 
-Feature:
+Mỗi section tối đa **10 dòng**:
 
-Must generate:
+```
+## What
+Thay đổi gì. Bullet point.
 
-- minimum 10 test cases
+## Why
+Lý do kỹ thuật. 1–3 câu.
 
-OR
+## Where
+Danh sách file bị ảnh hưởng (path đầy đủ).
 
-- minimum 5 technical risks
+## Risk
+Rủi ro quan trọng nhất. Tối đa 3 bullet.
+```
 
-Refactor:
+---
 
-Must generate:
+# FILES TỰ ĐỘNG SINH
 
-- minimum 10 regression test cases
+## Feature
 
-Bug:
+- `_index.md`
+- `01-feature-analysis.md` — What + Why
+- `02-architecture.md` — Where + thiết kế type/API
+- `03-task-breakdown.md` — danh sách task có checkbox
 
-Must generate:
+## Bugfix
 
-- minimum 10 validation test cases
+- `_index.md`
+- `01-bug-analysis.md` — What + Where
+- `02-root-cause.md` — Why (root cause chain)
+- `03-fix-strategy.md` — fix + regression check
 
-# SPEC WRITING & PROGRESS RULES
+## Refactor
 
-Use deterministic outputs.
+- `_index.md`
+- `01-refactor-analysis.md` — What + Why
+- `02-refactor-plan.md` — Where + thiết kế
+- `03-risk-analysis.md` — Risk + regression
 
-Avoid conversational writing.
+---
 
-Preserve:
+# QUY TẮC VIẾT
 
-- decisions
-- assumptions
-- risks
-- acceptance criteria
-- execution order
-
-Progress Updates (Mandatory):
-
-- During execution, the Agent **MUST** update `progress.md` immediately upon starting a task/subtask (marking as `[/]`) or completing it (marking as `[x]`).
-- The overall item status in `progress.md` must be set to `Completed` once all tasks are done.
-
-Target Directory:
-
-- Always use `sk-specs/active/<work-item-name>/` for active specs. Never use `.agent` (without 's').
-
-# DECISIONS.MD WRITING GUIDELINES
-
-`decisions.md` records **architectural and technical decisions** that have significant impact on the system design.
-
-When to write:
-
-- **Design Phase**: Record decisions about patterns, libraries, module boundaries, state management approach.
-- **Code Phase**: Record decisions made during implementation that deviate from or extend the original design.
-
-What to record:
-
-- Choosing a design pattern (e.g., Zustand slice vs monolithic store).
-- Selecting a third-party library over alternatives.
-- Splitting or merging modules/components.
-- Changing API contracts or data flow.
-
-What NOT to record:
-
-- Minor UI styling decisions (font size, padding values).
-- Variable naming choices.
-- Import ordering adjustments.
-
-# RISKS.MD WRITING GUIDELINES
-
-`risks.md` tracks **technical and business risks** associated with the current work item.
-
-When to write:
-
-- **BA Phase**: Record business risks (unclear requirements, stakeholder dependencies, scope creep).
-- **Design Phase**: Record technical risks (performance concerns, breaking changes, complex migrations).
-- **Code Phase**: Update risk status as risks are mitigated or new ones emerge during implementation.
-
-Risk status lifecycle:
-
-- `Open` → Risk identified but not yet addressed.
-- `Mitigated` → Countermeasures applied, risk reduced to acceptable level.
-- `Accepted` → Risk acknowledged, no action taken (with documented justification).
-- `Resolved` → Risk no longer applies.
+- Dùng bullet point, không dùng đoạn văn
+- Code block chỉ cho type definition và API signature
+- Không giải thích những gì đã rõ ràng từ code
+- Ưu tiên path đầy đủ thay vì tên component
+- Không ghi lại những gì user đã nói — chỉ ghi quyết định kỹ thuật
+- Khi cần chèn liên kết tệp (file links) vào tài liệu đặc tả trong `sk-specs/`, bắt buộc sử dụng đường dẫn tương đối (relative path, ví dụ: `[filename](../../src/path/to/file)`) thay vì đường dẫn tuyệt đối.

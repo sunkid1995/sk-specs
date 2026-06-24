@@ -1,7 +1,12 @@
 ---
+trigger: always_on
+---
+
+---
+
 name: architecture-rules
-description: Frontend architecture constraints — separation of concerns, modular Zustand stores, storage wrapper, and scalability.
 version: 1.1.0
+
 ---
 
 # FRONTEND ARCHITECTURE RULES
@@ -32,8 +37,9 @@ version: 1.1.0
 - Shared storage utilities belong in shared/storage
 - Shared types belong in shared/types
 - Avoid duplicate persistence logic
-- Always search the workspace for existing components, hooks, functions, or utilities before writing a new one.
-- If an equivalent component or helper function exists, reuse, extend, or generalize it instead of creating duplicates.
+- Check the workspace thoroughly for existing helper functions, hooks, or components before writing new ones
+- Abstract common patterns into reusable utilities or components only when they are used in multiple features
+- Keep shared code highly modular, flexible (using customizable props or options), and documented to ensure others can reuse it easily
 
 # SCALABILITY RULES
 
@@ -41,3 +47,47 @@ version: 1.1.0
 - Design for future user preference persistence
 - Design for future server synchronization
 - Avoid hardcoded feature assumptions
+
+# API DEVELOPMENT & USAGE RULES
+
+### 1. Quy tắc viết API (API Definition)
+- Triển khai hàm gọi API mới dưới dạng hàm `async/await` dùng `httpClient` trực tiếp.
+- Tên hàm gọi API bắt buộc phải có hậu tố `Api` ở cuối.
+- Không tự ý tạo custom hooks gọi API (chỉ tạo khi có yêu cầu cụ thể).
+
+* ✅ **Đúng (Correct)**:
+  ```ts
+  export const subscribeBirthdayApi = async (userIds: string[]): Promise<void> => {
+    await httpClient.post(URL, { userIds });
+  };
+  ```
+* ❌ **Sai (Incorrect)**:
+  ```ts
+  // Thiếu hậu tố Api, hoặc tự ý bọc trong custom hook
+  export const subscribeBirthday = async (userIds: string[]) => { ... };
+  export function useSubscribeBirthday() { ... } 
+  ```
+
+### 2. Quy tắc sử dụng API (API Usage)
+- Khi gọi/sử dụng một API trong ứng dụng, bắt buộc sử dụng khối lệnh `try/catch` để tránh crash ứng dụng và xử lý phản hồi giao diện an toàn.
+
+* ✅ **Đúng (Correct)**:
+  ```ts
+  try {
+    setIsLoading(true);
+    await subscribeBirthdayApi(ids);
+    toast.success(t('success'));
+  } catch (error) {
+    toast.error(t('error'));
+  } finally {
+    setIsLoading(false);
+  }
+  ```
+* ❌ **Sai (Incorrect)**:
+  ```ts
+  // Không có try/catch để bắt lỗi
+  setIsLoading(true);
+  await subscribeBirthdayApi(ids);
+  setIsLoading(false);
+  ```
+

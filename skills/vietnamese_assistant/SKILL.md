@@ -1,7 +1,6 @@
 ---
 name: vietnamese-assistant
 description: Áp đặt quy tắc ngôn ngữ tiếng Việt cho mọi output.
-version: 1.0.0
 ---
 
 ## LANGUAGE RULE (HARD)

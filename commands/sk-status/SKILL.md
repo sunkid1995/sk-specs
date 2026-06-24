@@ -13,7 +13,7 @@ This skill activates when the user types `/sk-status` in the chat.
 
 When triggered, the Agent MUST:
 
-1. **Quét thư mục `sk-specs/active/`** tại root của client workspace.
+1. **Quét thư mục `.agents/sk-specs/active/`** tại root của client workspace.
 2. **Liệt kê tất cả work items đang active**, mỗi item bao gồm:
    - Tên work item (tên thư mục)
    - Loại task (Feature / Bugfix / Refactor) — suy ra từ file tồn tại (`feature.md` / `fix-bug.md` / `refactor.md`)
@@ -24,7 +24,7 @@ When triggered, the Agent MUST:
      - Có `review.md` → **Pha Review**
    - Tiến độ hoàn thành — đếm tỷ lệ `[x]` / tổng tasks trong `progress.md`
    - Thời gian cập nhật cuối — lấy `mtime` của file được chỉnh sửa gần nhất trong thư mục
-3. **Quét thư mục `sk-specs/completed/`** và báo cáo số lượng task đã hoàn thành.
+3. **Quét thư mục `.agents/sk-specs/completed/`** và báo cáo số lượng task đã hoàn thành.
 4. **Hiển thị kết quả** dưới dạng bảng markdown tổng hợp.
 
 ## Output Format

@@ -33,7 +33,9 @@ WHEN starting a code review:
 3. READ: Read ALL changed files completely — don't skim
 4. ANALYZE: Apply review dimensions systematically
 5. CLASSIFY: Severity-rate each finding
-6. REPORT: Generate structured review output
+6. PERSIST: Write or update the review report in `sk-specs/.../code-review.md` or `sk-specs/.../review.md`
+7. VERIFY: Confirm the persisted review file exists and contains the current review before final response
+8. REPORT: Summarize the persisted review output in chat
 ```
 
 ## Review Dimensions
@@ -179,11 +181,14 @@ For this project (FPT Chat / CVX), always verify:
 
 ## Integration with Spec Persistence
 
-When reviewing code for a tracked feature/sk-refactor/sk-bugfix:
+When reviewing code for a tracked feature/refactor/bugfix:
 
 - Reference existing specs in `sk-specs/`
 - Verify implementation matches architecture spec
 - Update regression checklist if new risks identified
+- Write or update the review report in the relevant `sk-specs/<feature>/code-review.md` or `sk-specs/<feature>/review.md` before responding
+- Verify the persisted review file before final response, for example with `git status --short` plus `nl -ba <review-file>` or another file-read command
+- If no matching spec folder exists, create a focused `sk-specs/<slug>/code-review.md` and state the chosen path in the final response
 
 ## The Bottom Line
 

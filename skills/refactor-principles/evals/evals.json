@@ -3,9 +3,15 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Hãy lập kế hoạch refactor cho component tin nhắn chat lớn (>100 dòng JSX) đang có hiệu năng kém do re-render liên tục.",
-      "expected_output": "Kế hoạch refactor chi tiết có baseline test, đề xuất tách nhỏ component, trích xuất hook và sử dụng selector Zustand, kèm validation log.",
-      "files": []
+      "prompt": "Propose a refactoring plan for a React component that is currently 350 lines long, performs direct API calls in a useEffect, modifies Zustand state directly in event handlers, and has nested if-statements up to 4 levels in JSX.",
+      "expected_output": "Safe, step-by-step refactoring plan detailing baseline establishment, incremental changes (such as hook extraction and component splitting), and parity checking.",
+      "expectations": [
+        "The plan suggests running existing unit tests to establish a baseline before refactoring.",
+        "The plan recommends extracting API data fetching and handlers into a custom hook.",
+        "The plan recommends splitting the main component into smaller sub-components.",
+        "The plan suggests performing incremental commits at each safe stage.",
+        "The plan includes a verification phase checking both UI Parity and State Integrity."
+      ]
     }
   ]
 }
