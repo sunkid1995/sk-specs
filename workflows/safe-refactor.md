@@ -28,7 +28,7 @@ graph TD
 ## 1. Dependency Analysis & Baseline Check
 - Map the target module's import/export dependencies.
 - Run all existing test cases (`yarn test`, `npm run test`, `yarn test:jest`, or `vitest`) to verify that the current codebase is green.
-- Document current problems, refactor goals, and initial state in `refactor.md` (under `sk-specs/active/<work-item-name>/` using `templates/sk-refactor.md`).
+- Document current problems, refactor goals, and initial state in `refactor.md` (under `.agents/sk-specs/active/<work-item-name>/` using `templates/refactor.md`).
 
 ## 2. Refactor Plan Approval (Blocking)
 - Outline the step-by-step refactoring strategy (hook extraction, state isolation, selector usage, component splitting).

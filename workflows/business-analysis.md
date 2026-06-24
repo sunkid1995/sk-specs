@@ -11,7 +11,7 @@ graph TD
     Start([Bắt đầu Phân tích Nghiệp vụ]) --> GatherInfo[1. Quét user prompt & conversation history]
     GatherInfo --> CheckMissing{Có thông tin bị thiếu?}
     CheckMissing -- Có --> Clarify[Hỏi user làm rõ & đề xuất phương án] --> GatherInfo
-    CheckMissing -- Không --> CreateBA[2. Tạo ba.md theo mẫu templates/sk-ba.md]
+    CheckMissing -- Không --> CreateBA[2. Tạo ba.md theo mẫu templates/ba.md]
     CreateBA --> AC_Def[3. Định nghĩa Acceptance Criteria]
     AC_Def --> Checkpoint[4. BA Approval Checkpoint]
     Checkpoint --> WaitUser{User phê duyệt Phân tích BA?}
@@ -28,7 +28,7 @@ graph TD
 - Never make assumptions about missing requirements. Ask the user for clarification with specific recommendations.
 
 ## 2. Core Specification Writing
-- Automatically create or update `ba.md` inside `sk-specs/active/<work-item-name>/` using `templates/sk-ba.md` as a layout.
+- Automatically create or update `ba.md` inside `.agents/sk-specs/active/<work-item-name>/` using `templates/ba.md` as a layout.
 - Define Business & User Goals, Stakeholders, Scope (In/Scope & Out-of-Scope), Dependencies, and Risks.
 - Investigate chat-specific edge cases (offline sync, socket disconnects, permissions, race conditions).
 

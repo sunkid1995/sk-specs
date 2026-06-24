@@ -3,9 +3,14 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Hãy điều tra và sửa lỗi: Khi người dùng bấm F5 để reload trang, trạng thái store Zustand bị mất hoặc không đồng bộ với localStorage (hydration bị reset).",
-      "expected_output": "Giải pháp sửa lỗi tập trung vào root cause của quá trình hydration và persistence của Zustand, kèm kịch bản tái hiện lỗi.",
-      "files": []
+      "prompt": "Troubleshoot this bug: Users report that when they refresh the page (F5), their dark mode theme preference is lost, even though we save it to localStorage in a useEffect inside the App layout.",
+      "expected_output": "Systematic debugging proposal identifying reproduction conditions, finding the root cause (such as Zustand persistence mismatch or hydration sync issue), and verifying the fix.",
+      "expectations": [
+        "The response suggests reproducing the issue and isolating if it's in the UI render layer or Zustand state layer.",
+        "The response identifies the hydration timing or Zustand persistence mismatch as a likely root cause.",
+        "The response cautions against blind patching (e.g. adding manual delays/timeouts).",
+        "The response proposes a verification step to test the fix (e.g. mock refresh or test state persistence)."
+      ]
     }
   ]
 }

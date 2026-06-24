@@ -1,7 +1,14 @@
 ---
-name: import-rule
-description: Import organization standards — block ordering, comment format, and alphabetical sorting in TypeScript.
+trigger: always_on
+description: Hướng dẫn sắp xếp và nhóm các lệnh import trong các tệp JS/TS/React của dự án để đảm bảo tính gọn gàng và sạch sẽ.
+---
+
+---
+
+name: import-rules
 version: 1.0.0
+description: Hướng dẫn sắp xếp và nhóm các lệnh import trong các tệp JS/TS/React của dự án để đảm bảo tính gọn gàng và sạch sẽ.
+
 ---
 
 # IMPORT ORGANIZATION RULES

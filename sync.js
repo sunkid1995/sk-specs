@@ -211,6 +211,13 @@ if (fs.existsSync(srcHooksDir)) {
     for (let hookFile of hookFiles) {
         const srcHookPath = path.join(srcHooksDir, hookFile);
         const targetHookPath = path.join(clientHooksDir, hookFile);
+
+        // Nếu là thư mục (ví dụ intelligence/) -> copy đệ quy
+        if (fs.statSync(srcHookPath).isDirectory()) {
+            copyDirSync(srcHookPath, targetHookPath);
+            continue;
+        }
+
         const newUpstreamHash = computeFileHash(srcHookPath);
 
         if (!fs.existsSync(targetHookPath)) {

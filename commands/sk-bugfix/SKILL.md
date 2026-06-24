@@ -9,7 +9,7 @@ version: 1.0.0
 When this skill is activated (via `/sk-bugfix`), execute the Bugfix Workflow:
 
 1. Identify or create `ba.md` for the context of the bug. If it's legacy code, perform reverse-engineering to document requirements.
-2. Automatically generate or update `fix-bug.md` under `sk-specs/active/<work-item-name>/` using `sk-specs/templates/fix-bug.md`.
+2. Automatically generate or update `fix-bug.md` under `.agents/sk-specs/active/<work-item-name>/` using `templates/fix-bug.md`.
 3. List the reproduction steps and establish a failing test case to isolate the bug behavior.
 4. Stop at the Design Checkpoint:
    *"Bạn có muốn chỉnh sửa gì trong thiết kế kỹ thuật/kế hoạch sửa lỗi này không?"*

@@ -10,8 +10,8 @@ version: 2.0.0
 graph TD
     Start([Bắt đầu Phân tích Tính năng]) --> VerifyBA[1. Kiểm tra sự tồn tại & duyệt của ba.md]
     VerifyBA --> CheckBA{ba.md đã được duyệt?}
-    CheckBA -- Chưa --> RunBA[Kích hoạt quy trình /sk-ba trước] --> VerifyBA
-    CheckBA -- Rồi --> CreateFeature[2. Tạo/Cập nhật feature.md theo templates/sk-feature.md]
+    CheckBA -- Chưa --> RunBA[Kích hoạt quy trình /ba trước] --> VerifyBA
+    CheckBA -- Rồi --> CreateFeature[2. Tạo/Cập nhật feature.md theo templates/feature.md]
     CreateFeature --> DetailArch[Mô tả State Management, Reusable Modules, Technical Risks]
     DetailArch --> PhasePlan[3. Phân chia phases triển khai & ưu tiên data layer]
     PhasePlan --> Checkpoint[4. Design Approval Checkpoint]
@@ -20,15 +20,15 @@ graph TD
     WaitUser -- Có --> End([Hoàn thành Thiết kế - Sẵn sàng Code])
 ```
 
-- ba.md (Approved under `sk-specs/active/<work-item-name>/`)
+- ba.md (Approved under `.agents/sk-specs/active/<work-item-name>/`)
 
 # WORKFLOW STEPS
 
 ## 1. BA Verification
-- Confirm that `ba.md` exists and is approved. If `ba.md` does not exist or is not signed off, execute the `/sk-ba` workflow first.
+- Confirm that `ba.md` exists and is approved. If `ba.md` does not exist or is not signed off, execute the `/ba` workflow first.
 
 ## 2. Technical & Architectural Analysis
-- Create or update `feature.md` under `sk-specs/active/<work-item-name>/` using the layout in `templates/sk-feature.md`.
+- Create or update `feature.md` under `.agents/sk-specs/active/<work-item-name>/` using the layout in `templates/feature.md`.
 - Detail the functional requirements, state management strategy, persistence requirements, and reusable modules.
 - Assess architectural risks (e.g., SSR hydration mismatch, race conditions, type safety).
 

@@ -9,7 +9,7 @@ version: 1.0.0
 When this skill is activated (via `/sk-refactor`), execute the Refactor Workflow:
 
 1. Retrieve or construct `ba.md` and gather existing test coverage for the target module.
-2. Automatically generate or update `refactor.md` under `sk-specs/active/<work-item-name>/` using `sk-specs/templates/sk-refactor.md`.
+2. Automatically generate or update `refactor.md` under `.agents/sk-specs/active/<work-item-name>/` using `templates/refactor.md`.
 3. Evaluate architectural impacts, dependency graphs, and plan changes incrementally.
 4. Stop at the Design Checkpoint:
    *"Bạn có muốn chỉnh sửa gì trong kế hoạch tái cấu trúc (refactor) này không?"*

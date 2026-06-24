@@ -1,68 +1,80 @@
 ---
+trigger: always_on
+description: Quy định luồng hoạt động của Agent khi đọc và tải tài liệu đặc tả (specification) của dự án để tối ưu hóa dung lượng ngữ cảnh.
+---
+
+---
+
 name: spec-loading
-description: Spec context loading behavior — search algorithm, matching rules, and reuse existing decisions and specifications.
-version: 3.0.0
+version: 1.0.0
+description: Quy định luồng hoạt động của Agent khi đọc và tải tài liệu đặc tả (specification) của dự án để tối ưu hóa dung lượng ngữ cảnh.
+
 ---
 
 # SPEC LOADING BEHAVIOR
 
-Before generating any output for a Feature, Bugfix, or Refactor task, the Agent MUST search for and load existing specifications to maintain context continuity.
+## Nguyên tắc cốt lõi
 
-## 1. SEARCH DIRECTORIES (Ordered by Priority)
+Đọc ít nhất có thể. Đọc đúng file cần thiết.
 
-Search specs in the following order. Stop at the first match:
+**Không bao giờ** đọc toàn bộ `sk-specs/` một lúc.
 
-1. `sk-specs/active/` — Active work items (highest priority).
-2. `sk-specs/completed/` — Previously completed work items (for reference and reuse).
-3. `sk-specs/archived/` — Historical records (lowest priority, read-only reference).
+---
 
-## 2. MATCHING ALGORITHM
+## Khi nào phải đọc spec
 
-Given a user prompt describing a work item (e.g., "Feature: Persist current todo tab"), the Agent MUST resolve the matching spec directory using the following steps:
+Bắt buộc khi task là **Feature / Bugfix / Refactor**:
 
-1. **Exact match**: Compare the `<work-item-name>` directory name directly.
-   - Example: User says "persist-current-todo-tab" → match `sk-specs/active/persist-current-todo-tab/`.
-2. **Kebab-case normalization**: Normalize both user input and directory names to `kebab-case` before comparing.
-   - Example: User says "Persist Current Todo Tab" → normalize to `persist-current-todo-tab` → match.
-3. **Substring match**: If no exact or normalized match, search for directories whose name contains significant keywords from the user prompt.
-   - Example: User says "todo tab persistence" → match `persist-current-todo-tab/` via keyword overlap.
+1. Luôn sử dụng tool `list_dir` để liệt kê nội dung thư mục `sk-specs/` nhằm xác định xem đã tồn tại folder spec liên quan đến task hiện tại chưa.
+2. Nếu folder spec đã tồn tại (ví dụ: `sk-specs/<task-name>/`), **BẮT BUỘC** gọi tool `view_file` để đọc trực tiếp file `sk-specs/<task-name>/_index.md` NGAY LẬP TỨC.
+3. Chạy `node .agents/hooks/pre-ba.js <task-name>` — đọc output.
+4. Nếu `pre-ba` báo conflict hoặc tương đồng (exit code 2) với các spec khác, sử dụng tool `view_file` để đọc file `_index.md` của các spec đó.
 
-## 3. CONFLICT RESOLUTION
+---
 
-If **multiple specs** match the user prompt:
+## Thứ tự đọc (bắt buộc)
 
-1. List all matching specs with their paths and statuses.
-2. Ask the user to select the correct one: _"Tìm thấy nhiều spec khớp với yêu cầu. Vui lòng chọn spec cần sử dụng:"_
-3. Do NOT proceed until the user confirms.
+### Bước 1 — Đọc `_index.md` của task hiện tại
 
-If **no specs** match:
+Nếu task name match với folder trong `sk-specs/`, sử dụng tool `view_file` để đọc:
 
-- Proceed with creating a new spec directory under `sk-specs/active/<work-item-name>/`.
+```
+sk-specs/<task-name>/_index.md
+```
 
-## 4. FILES TO LOAD
+File này cho biết: danh sách files bị ảnh hưởng, risk, status và search keywords.
 
-When a matching spec directory is found, automatically load all available files:
+### Bước 2 — Kiểm tra conflict / similar
 
-- `ba.md` — Business analysis
-- `feature.md` / `refactor.md` / `fix-bug.md` — Technical design
-- `decisions.md` — Architecture decisions
-- `risks.md` — Technical risks
-- `progress.md` — Implementation progress
-- `review.md` — Code review results
+`pre-ba hook` in ra danh sách task `active` hoặc tương đồng.  
+Đọc `_index.md` của các task đó nếu cần xem scope overlap.
 
-## 5. PRIORITY RULES
+### Bước 3 — Chỉ đọc detail khi thực sự cần
 
-When loaded specs conflict with user prompt:
+| Khi nào cần đọc       | File cần đọc              |
+| --------------------- | ------------------------- |
+| Cần hiểu kiến trúc cũ | `02-architecture.md`      |
+| Cần task breakdown    | `03-task-breakdown.md`    |
+| Cần biết root cause   | `02-root-cause.md`        |
+| Cần regression check  | `regression-checklist.md` |
 
-1. Existing architectural decisions (`decisions.md`) take precedence.
-2. Existing risk assessments (`risks.md`) must be acknowledged.
-3. User prompt may override specific details but NOT architectural patterns already decided.
-4. If override is necessary, the Agent MUST document the change in `decisions.md`.
+**Không đọc tất cả 4 file trừ khi bắt buộc.**
 
-## 6. CONTINUATION RULE
+---
 
-If specs exist:
+## Priority Order
 
-- Reuse existing decisions.
-- Avoid conflicting outputs.
-- Continue current workflow from the last recorded progress state.
+1. `_index.md` của task hiện tại (nếu có) — **ĐỌC NGAY**
+2. `_index.md` của task conflict/similar (nếu pre-ba báo)
+3. Detail file của task hiện tại (chỉ khi cần)
+4. New analysis từ user prompt
+
+---
+
+## Quy tắc bỏ qua
+
+Bỏ qua spec nếu:
+
+- `status: done` trong `_index.md` và task hiện tại không liên quan
+- Không có file nào overlap với task hiện tại
+- Spec folder được tạo cách đây > 30 ngày và không có task breakdown active

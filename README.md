@@ -297,9 +297,41 @@ Các Hook mẫu trong `sk-specs/hooks/` được đồng bộ từ kho chứa ng
 - Khi cập nhật cấu hình `sk-specs`, nếu người dùng **chưa tùy chỉnh** các tệp hook (mã băm của tệp khớp với mã băm lưu tại manifest): Các tệp hook sẽ tự động được ghi đè phiên bản mới nhất.
 - Nếu người dùng **đã tùy biến** logic hook (mã băm hiện tại khác phiên bản manifest): Phiên bản nâng cấp mới của hook sẽ được lưu dưới tên `<tên-hook>.upstream` (ví dụ: `pre-code.js.upstream`). Người dùng có thể so sánh và thực hiện merge thủ công để không bị mất các logic tùy chỉnh riêng của dự án.
 
+## 6. Cấu Hình Động (Dynamic Configuration) qua `sk-specs.config.json`
+
+Bộ khung hỗ trợ cơ chế cấu hình động giúp tách biệt logic dùng chung của AI Agent và cấu trúc nghiệp vụ đặc thù của từng dự án client (như các aliases, thư mục bỏ qua, danh sách stop words hoặc từ khóa nghiệp vụ).
+
+### 6.1. Tệp cấu hình `sk-specs.config.json`
+Tệp cấu hình đặt tại thư mục gốc của dự án Client. Ví dụ cấu trúc tệp:
+
+```json
+{
+  "aliasToSrc": {
+    "@components": "app/components",
+    "@hooks": "app/hooks",
+    "@store": "app/store"
+  },
+  "ignoredDirs": [
+    "node_modules", ".git", "dist", "build", ".agents", "coverage"
+  ],
+  "sourceExtensions": [".ts", ".tsx", ".js", ".jsx"],
+  "featureKeywords": [
+    "auth", "todo", "chat", "setting"
+  ],
+  "stopWords": [
+    "fix", "refactor", "update", "and", "the"
+  ]
+}
+```
+
+### 6.2. Cơ chế tự động tìm nạp (Automatic Configuration Resolution)
+Theo quy tắc cấu hình trong [core-rules.md](rules/core-rules.md), Agent được yêu cầu hoạt động hoàn toàn tự động mà không cần người dùng tự khai báo thủ công:
+1. **Kiểm tra tự động**: Agent sẽ tìm nạp `sk-specs.config.json` khi bắt đầu công việc.
+2. **Tự động phân tích & khởi tạo**: Nếu chưa có tệp hoặc thiếu các trường cấu hình cốt lõi, Agent bắt buộc phải tự quét mã nguồn của Client (aliases từ `tsconfig.json` hoặc `vite.config.ts`, các folder nghiệp vụ, cấu trúc thư mục) và tự động tạo mới hoặc cập nhật đầy đủ các trường vào tệp `sk-specs.config.json`.
+
 ---
 
-## 6. Lợi Ích & Tầm Nhìn Kỹ Thuật
+## 7. Lợi Ích & Tầm Nhìn Kỹ Thuật
 
 - **Context Continuity (Tính liên tục)**: Chuyển giao công việc giữa các Agent dễ dàng, không phụ thuộc vào bộ nhớ chat cũ.
 - **Deterministic Outputs (Tính nhất quán)**: Thiết kế mã nguồn có tính kế thừa và thống nhất, giảm thiểu mã nguồn bị phân mảnh.

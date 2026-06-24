@@ -3,9 +3,28 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Hãy review đoạn code thay đổi sau đây và xuất báo cáo code-review.md. Đảm bảo phân loại lỗi đúng mức độ nghiêm trọng và định dạng 4 phần bằng tiếng Việt.",
-      "expected_output": "Báo cáo code-review.md đúng định dạng 4 phần bằng tiếng Việt, sử dụng các emoji màu sắc 🔴, 🟡, 🔵, 🟢 để phân loại lỗi.",
-      "files": []
+      "prompt": "Perform a code review on this component:\n\n```tsx\nimport React from 'react';\n\nexport const MyCard = ({ user }: { user: any }) => {\n  return (\n    <div className=\"bg-white border rounded p-4 shadow-sm flex items-center justify-between\">\n      <div>\n        <h3 className=\"text-lg font-bold text-gray-900\">Thành viên mới</h3>\n        <p className=\"text-sm text-gray-500\">{user.name}</p>\n      </div>\n    </div>\n  );\n};\n```",
+      "expected_output": "Structured code review following the 4-section Vietnamese layout, identifying type safety violations (any) as 🔴 Critical, export style issues as 🟡 Important, and i18n violations (hardcoded Vietnamese text) as 🟡 Important.",
+      "expectations": [
+        "The review includes the section '## 1. Đánh giá tổng thể'.",
+        "The review includes the section '## 2. Đánh giá bổ sung'.",
+        "The review includes the section '## 3. Các điểm rủi ro và cần lưu ý'.",
+        "The review includes the section '## 4. Đánh giá chi tiết mã nguồn'.",
+        "The review flags the use of `any` with the prefix '🔴 Critical'.",
+        "The review flags the named export `export const MyCard` with the prefix '🟡 Important'.",
+        "The review flags the hardcoded text 'Thành viên mới' with the prefix '🟡 Important' and suggests using `t('key')`."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Perform a code review on this Zustand store:\n\n```typescript\nimport { create } from 'zustand';\n\ninterface SessionState {\n  token: string | null;\n  setToken: (token: string | null) => void;\n}\n\nexport const useSessionStore = create<SessionState>((set) => ({  \n  token: localStorage.getItem('session_token'),\n  setToken: (token) => {\n    localStorage.setItem('session_token', token || '');\n    set({ token });\n  },\n}));\n```",
+      "expected_output": "Structured code review following the 4-section Vietnamese layout, identifying lack of immer/devtools middleware as 🟡 Important, missing action labels as 🟡 Important, and direct localStorage access as 🟡 Important.",
+      "expectations": [
+        "The review includes the section '## 3. Các điểm rủi ro và cần lưu ý' containing a markdown table for risk assessment.",
+        "The review flags the direct `localStorage` access with the prefix '🟡 Important'.",
+        "The review flags the missing Zustand middleware (devtools, immer) with the prefix '🟡 Important'.",
+        "The review flags the missing action labels (e.g. 'storeName/actionName') with the prefix '🟡 Important'."
+      ]
     }
   ]
 }
